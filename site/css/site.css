@@ -61,7 +61,8 @@ main{position:relative;z-index:1}
 .rig{position:absolute;inset:0;z-index:4;perspective:1400px;perspective-origin:50% 50%;transform-style:preserve-3d;will-change:transform}
 .slot{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform,opacity,filter;visibility:hidden;opacity:0}
 .slot.is-vis{visibility:visible;opacity:1}
-.slot .poster,.slot canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slot canvas{position:absolute;inset:0;width:100%;height:100%}
+.slot .poster{position:absolute;top:0;left:50%;height:100%;width:auto;max-width:none;translate:-50% 0}  /* fit by height, centred — matches how the canvas draws the frames */
 .slot canvas{opacity:0}
 .slot.is-live canvas{opacity:1}
 .slot.is-live .poster{opacity:0}

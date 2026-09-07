@@ -14,8 +14,8 @@ Pages rebuilds in ~40 s. No `gh` CLI on the PC: the repo was created over the RE
 
 ## What exists
 - `site/` — the deliverable. `index.html`, `css/site.css`, `js/loadout.js`, `js/manifest.js`, `js/vendor/`
-  (GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.18), `frames/01..05/f_001..061.webp` (alpha, 1280 wide, ~3.2 MB a
-  drink, 16 MB total), `img/` (alpha posters: 01 at 3200 wide from the 4k still, others 2560; 1000-wide cards).
+  (GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.18), `frames/01..05/f_001..061.webp` (alpha, 1084×1080 centre crops from the 2K upscales, ~6 MB a
+  drink, 30 MB total), `img/` (alpha posters: 01 at 3200 wide from the 4k still, others 2560; 1000-wide cards).
 - `keyframes/float/` — five Nano Banana Pro "levitating" stills (01 at 4k) + `*-cut.png` (Image Background
   Remover silhouettes). `keyframes/*.png` — the v1 pedestal stills (kept, unused). NOT in git.
 - `clips/float/` — five Kling 3.0 Turbo 1080p rotations + `*-alpha.mp4` (Video Background Remover output).
@@ -51,6 +51,33 @@ Circle: "flow more, less laggy; real Tower flavors, fact-checked; my real Tower 
   Still not their vector file — get it from the owner before this ships as theirs.
 - Facebook Graph profile-picture endpoint returns a placeholder without a token; TikTok captions parse
   failed on escapes (low value; skipped).
+
+## v3.1 — "main drinks are still blurry" (2026-09-07)
+Cause: frames were the full 16:9 Kling frame downscaled to 1280 wide, then cover-fit UP to the viewport — every
+cup was upsampled ~1.3–2×. Fix: `assemble-float.sh` now keeps NATIVE resolution and crops the centre
+`1080×1076` (x 424–1504 of the 1928 frame — the cup plus the whole ice orbit; the void is transparent so nothing
+is lost), WebP q86. `draw()` fits by HEIGHT and centres (no cover-fit); the poster is sized the same way
+(`height:100%; width:auto; translate:-50% 0`) so the first-scroll handoff does not jump. Cup canvases DPR cap
+back to 1.5, particle canvases stay at 1.25. Payload 16 → 19 MB. Headless jank p95 46 ms / max 65 ms — the
+software raster pays for the bigger blit; on a GPU it is a texture blit. If the box still stutters, the next
+lever is the crop width (1080 → 960) and B_KEEP 18 → 12, not the resolution.
+
+## v3.2 — the blur was the FOOTAGE, so: Bytedance 2K upscale (2026-09-07)
+Native-res crops alone still looked soft next to the 4k still: Kling 1080p mid-rotation is soft. **Bytedance Video
+Upscale, 2K, preset `aigc`, is 0.2 credits a clip** (1 credit for all five; balance 37.1 → 36.1) and returns
+2580×1440 with real added detail (condensation, ice edges, sticker text). `assemble-float.sh` now prefers
+`clips/float/NN-up.mp4` when present, scales the remover matte to the source with `scale2ref`, centre-crops 56 %
+of the width, downsamples to 1080 tall (lanczos) with a light unsharp, WebP q82 → frames 1084×1080, ~6 MB a
+drink, **30 MB total** (was 19). Levers if that is too heavy: q82→76, or every 3rd frame (41/drink, −33 %).
+Balance now 36.1 credits.
+**The decoded-image cache was the real hog.** Frames were loaded as `new Image()` objects: Chrome keeps decoded
+pixels for those (4.7 MB × 305 = 1.4 GB potential) on top of the bitmap window. `pump()` now `fetch()`es each frame
+as an encoded Blob and `createImageBitmap(blob)` decodes only the window. Headless jank went p95 63 → **17 ms**,
+max 94 → 75, slow frames 144 → 4 (the first whip + the lineup pin). Never load frames as `<img>` again.
+**The box itself is the constraint**: while testing, this PC had ~0.7–1.1 GB free of 16 GB (Circle's own Chrome
+≈1.7 GB across 37 processes, the Krypt terminal ≈0.5 GB). Any heavy page stutters here regardless of code, and the
+headless jank numbers swing 65 ms → 10 s with free RAM. So: frames q78 with no unsharp (~4.5 MB a drink), bitmap
+window ±8 keep 10 (≈50 MB per active cup, was ≈85), and judge smoothness on a machine with headroom too.
 
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for

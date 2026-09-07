@@ -7,10 +7,11 @@ NAMES=${@:-"01-wondermelon 02-hurricane-huda 03-sour-gummy-worm 04-viva-las-vega
 LOOSE="colorkey=0x000000:0.34:0.14"
 for N in $NAMES; do
   ID=${N%%-*}; SRC=clips/float/$N.mp4; MAT=clips/float/$N-alpha.mp4
+  [ -r "clips/float/$N-up.mp4" ] && SRC="clips/float/$N-up.mp4"   # Bytedance 2K upscale of the same clip, if present
   [ -r "$SRC" ] || { echo "[$N] missing $SRC"; continue; }
   OUT=site/frames/$ID; rm -rf "$OUT"; mkdir -p "$OUT"
   if [ -r "$MAT" ]; then
-    ffmpeg -v error -i "$SRC" -i "$MAT" -filter_complex "[1:v]format=gray,lutyuv=y='if(gt(val,10),255,0)',boxblur=1:1[A];[0:v]format=rgba,$LOOSE,alphaextract[B];[A][B]blend=all_mode=lighten,format=gray[M];[0:v][M]alphamerge,select='not(mod(n\,2))',scale=1280:-2:flags=lanczos" -vsync vfr -c:v libwebp -pix_fmt yuva420p -quality 82 -compression_level 5 "$OUT/f_%03d.webp"
+    ffmpeg -v error -i "$SRC" -i "$MAT" -filter_complex "[1:v]format=gray,lutyuv=y='if(gt(val,10),255,0)',boxblur=1:1[A0];[0:v]format=rgba,$LOOSE,alphaextract[B];[A0][B]scale2ref[A][B2];[A][B2]blend=all_mode=lighten,format=gray[M];[0:v][M]alphamerge,select='not(mod(n\,2))',crop=iw*0.56:ih:iw*0.22:0,scale=-2:1080:flags=lanczos" -vsync vfr -c:v libwebp -pix_fmt yuva420p -quality 78 -compression_level 5 "$OUT/f_%03d.webp"
     MODE=union
   else
     ffmpeg -v error -i "$SRC" -vf "select='not(mod(n\,2))',format=rgba,colorkey=0x000000:0.07:0.06,scale=1280:-2:flags=lanczos" -vsync vfr -c:v libwebp -pix_fmt yuva420p -quality 82 -compression_level 5 "$OUT/f_%03d.webp"
