@@ -10,7 +10,7 @@ for the business, not the owner's site. They have NO website (Google Business Pr
 | Name | The Tower Energy and Nutrition ("The Tower") | IG / FB / Google |
 | Address | 584 Buchanan Ave, Norman, OK 73069 — Campus Corner, by OU | Google, IG bio |
 | Phone / order ahead | (405) 300-4086 | IG bio, FB intro |
-| Hours | Mon–Fri 7am–7pm · Sat 9am–5pm · Sun 9am–6pm | Yelp/Google (search summary) |
+| Hours | Mon–Fri 7am–7pm · Sat–Sun 9am–5pm | Their door decal (Google photo g08); search summaries said Sun 9–6 — the door wins |
 | Google | 5.0 ★, 257 reviews | Google Maps panel |
 | Instagram | @thetowernutrition — 13.3K followers, 1,144 posts | IG |
 | TikTok | @thetowernutrition — 1,339 followers | TikTok |
@@ -88,3 +88,17 @@ chain seams to gate. Hero = 2k Nano Banana Pro keyframe shown until first scroll
 | **Planned total** | **≈ 140** |
 
 Audio OFF on every clip. Receipt goes in STATE.md when done.
+
+## v3 addendum (2026-09-07) — flavor evidence
+| Name | Evidence | Strength |
+|---|---|---|
+| Skittles, Tropical Splash, Caribbean Paradise | Owner flavor-card photos on Google Business (g21, g22, g61) | first-party |
+| Açaí Berry, Orange | "National Hydration Day" owner post (g02) | first-party |
+| Memorial Day Tea | Owner post (g03) | first-party |
+| Bubbles | Owner post (g42) | first-party |
+| Lucky Me Gotta Tea | Sticker on cups in owner photo (g01) | first-party (slogan, not a flavor) |
+| Viva Las Vegas (Margarita · Strawberry · Cranberry · Limeade) | Instagram post 2026-08-31 | first-party |
+| Wondermelon, Hurricane Huda | Customer reviews via search summary | second-hand |
+| Sour Gummy Worm | Google review (Ashlee N.) | second-hand |
+| Chocolate Brownie shake | Google review (Mike G.) | second-hand |
+Hours: door decal in g08 reads "M-F: 7am-7pm · Sat-Sun: 9am-5pm".

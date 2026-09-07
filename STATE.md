@@ -25,6 +25,33 @@ Pages rebuilds in ~40 s. No `gh` CLI on the PC: the repo was created over the RE
 - `verify/` — `jank2.js` (located jank test), `probe.js` (offsets/errors/ready time), captures. NOT in git.
 - Preview: `.claude/launch.json` entry `tower-nutrition` → `python -m http.server 8766` on `site/`.
 
+## v3 (2026-09-07, later the same day) — "smoother, real flavors, real photos, real branding"
+Circle: "flow more, less laggy; real Tower flavors, fact-checked; my real Tower photos; official branding."
+- **Perf/feel**: HUD `backdrop-filter` removed (re-blurred every frame over a live canvas), glow `filter:saturate`
+  removed, shadow `filter:blur` replaced by a plain gradient, swipe blur 6→4 px, canvas DPR cap 1.5→1.25, swipe
+  unit 0.45→0.62 (longer whip), playhead lerp .12→.16, Lenis lerp .085→.11, particles 110/11→70/8.
+  Headless jank after: 1584 frames, p95 35 ms, max 63 ms, 6 frames >50 (all on the first whip and the lineup
+  pin — software raster). Real-GPU feel is what Circle judges; nothing here is measured on a GPU.
+- **Flavors, fact-checked** (first-party = their own Google Business photos / IG posts; second = customer reviews):
+  Skittles, Tropical Splash, Caribbean Paradise (owner flavor cards, photos g21/g22/g61) · Açaí Berry, Orange,
+  Memorial Day Tea (owner posts g02/g03) · Bubbles (g42) · Lucky Me Gotta Tea (sticker, g01) · Viva Las Vegas
+  (IG post 08-31) · Wondermelon, Hurricane Huda, Sour Gummy Worm, Chocolate Brownie shake (reviews only).
+  Cup 03 renamed **Sour Gummy Worm → Tropical Splash** because the owner card is yellow-on-green exactly like the
+  footage. The flavor wall in the board section lists all of the above; nothing else is named anywhere.
+- **Real photos**: 61 owner photos pulled from the Google Business listing at 1800 px (`photos/raw/`, `verify/
+  gphotos.js`); 17 converted to `site/img/p/` (1400 + 720 wide WebP). New "SIT DOWN. SIP UP." section (their
+  wall slogan) with two scroll-scrubbed strips, a parallax polaroid in Story, a parallax storefront banner above
+  Visit, and three flavor-card tiles in the wall. Instagram could not be harvested (JS blocked, story viewer
+  freezes screenshots) — Google's copies of their photos are the source.
+- **Hours corrected from their own door decal** (visible in photo g08): Mon–Fri 7am–7pm, Sat–Sun 9am–5pm.
+  Sunday was 9–6 from a search summary; the door says 5.
+- **Branding**: the sign (g08/g27) shows a straight rectangular lattice tower left of a stacked THE / TOWER in a
+  condensed bold sans, "Energy & Nutrition" beneath; the wall wordmark (g04/g15) is the same in red. Lockup
+  redrawn as that rectangular lattice; lockup face switched to Oswald 700 (closest Google face to the sign).
+  Still not their vector file — get it from the owner before this ships as theirs.
+- Facebook Graph profile-picture endpoint returns a placeholder without a token; TikTok captions parse
+  failed on escapes (low value; skipped).
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed
@@ -81,7 +108,7 @@ Balance 241.1 at the start → **37.1 credits** now.
 
 ## Claims on the page and where each comes from (owner should still okay before it ships)
 - "Five years on the corner" ← "Tower Turns Five" birthday post. 5.0 / 257 ← Google Maps 2026-09-07. 13.3K ← IG.
-- Hours Mon–Fri 7–7, Sat 9–5, Sun 9–6 ← Yelp/Google via search summary. **Verify with the owner.**
+- Hours Mon–Fri 7–7, Sat–Sun 9–5 ← their own door decal (photo g08). Holiday hours vary (their posts).
 - Three review quotes verbatim from Google (Jennie E., Ashlee N., Mike G.).
 - Drink names all appear on their channels/reviews; Hurricane Huda's flavor unknown (page describes colour only).
 - Ambassador program ← their IG/TikTok "Apply to be a Tower Campus Ambassador".
