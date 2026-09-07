@@ -1,0 +1,5 @@
+clips/
+keyframes/*.png
+keyframes/*.json
+verify/*.png
+node_modules/
