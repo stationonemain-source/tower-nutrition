@@ -1,0 +1,29 @@
+[
+  {
+    "created_at": "2026-09-07T06:20:28.382353Z",
+    "display_name": "Nano Banana Pro",
+    "id": "ddbbe1db-810f-4085-af1a-31209314b5b6",
+    "job_type": "nano_banana_pro",
+    "min_result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/hf_20260907_062028_ddbbe1db-810f-4085-af1a-31209314b5b6_min.webp",
+    "params": {
+      "application": null,
+      "aspect_ratio": "16:9",
+      "batch_size": 1,
+      "height": 1536,
+      "input_image": null,
+      "input_images": [
+        {
+          "id": "99120f68-bce9-4640-9569-8aa203820f6a",
+          "type": "media_input",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/99120f68-bce9-4640-9569-8aa203820f6a_resize.jpg"
+        }
+      ],
+      "prompt": "Use the reference image as the exact product: the identical tall clear 24 oz plastic cup with clear dome lid and bright electric blue straw, the identical round white sticker reading \"THE TOWER\" and \"ENERGY & NUTRITION\" with the small black lattice tower icon above the words, the identical electric blue-to-violet iced tea with ice inside, the identical condensation. Now the cup is LEVITATING in a pure black void: no turntable, no table, no floor, no surface, no reflection beneath it. It floats dead center in the frame, perfectly upright, with six or seven clear ice cubes and dozens of glistening water droplets suspended in the air around it as if frozen mid-splash, and a faint blue-violet glow emitted by the drink lighting the nearest ones. Lighting identical to the reference: one soft key light from the upper left and a thin crimson rim light along the right edge of the cup. Background: pure solid black everywhere, no vignette, no gradient, no visible light source, no text other than the sticker, no hands, no people. 16:9 frame, the cup about 70 percent of the frame height, generous empty black space left and right of it. Commercial beverage advertising photograph, razor sharp, ultra detailed.",
+      "resolution": "2k",
+      "surface": null,
+      "width": 2752
+    },
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/hf_20260907_062028_ddbbe1db-810f-4085-af1a-31209314b5b6.png",
+    "status": "completed"
+  }
+]

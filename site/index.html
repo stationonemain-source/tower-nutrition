@@ -8,7 +8,7 @@
 <meta property="og:title" content="The Tower Energy & Nutrition">
 <meta property="og:description" content="Energy teas, protein shakes and good vibes on Campus Corner in Norman, OK.">
 <meta property="og:image" content="img/01-poster.webp">
-<meta name="theme-color" content="#050506">
+<meta name="theme-color" content="#000000">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 48'%3E%3Cpath fill='none' stroke='%23C8102E' stroke-width='3' d='M4 46 10 8h4l6 38M2 46h20M9 8h6V4H9z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +45,16 @@
 <section id="film" class="film" data-theme="dark" aria-label="The loadout — scroll to turn each drink">
   <div id="stage" class="stage">
     <div class="glow" aria-hidden="true"></div>
+    <div class="shadow" aria-hidden="true"></div>
+    <canvas class="fx fx-back" aria-hidden="true"></canvas>
+
+    <div class="titles" aria-hidden="true">
+      <div class="title is-vis" data-i="0" style="--fs:16.5vw;--fs-m:26vw"><span class="ln"><span>Wonder</span></span><span class="ln"><span>melon</span></span></div>
+      <div class="title" data-i="1" style="--fs:11.5vw;--fs-m:20vw"><span class="ln"><span>Hurricane</span></span><span class="ln"><span>Huda</span></span></div>
+      <div class="title" data-i="2" style="--fs:10.5vw;--fs-m:18vw"><span class="ln"><span>Sour Gummy</span></span><span class="ln"><span>Worm</span></span></div>
+      <div class="title" data-i="3" style="--fs:12.5vw;--fs-m:22vw"><span class="ln"><span>Viva</span></span><span class="ln"><span>Las Vegas</span></span></div>
+      <div class="title" data-i="4" style="--fs:12vw;--fs-m:20vw"><span class="ln"><span>Chocolate</span></span><span class="ln"><span>Brownie</span></span></div>
+    </div>
 
     <div class="rig" aria-hidden="true">
       <div class="slot is-vis" data-i="0"><img class="poster" src="img/01-poster.webp" alt="" decoding="async" fetchpriority="high"><canvas></canvas></div>
@@ -54,15 +64,9 @@
       <div class="slot" data-i="4"><img class="poster" src="img/05-card.webp" alt="" decoding="async" loading="lazy"><canvas></canvas></div>
     </div>
 
-    <div class="eyebrow mono"><span>Campus Corner · Norman, OK</span><span class="sep">/</span><span>Pick your loadout</span></div>
+    <canvas class="fx fx-front" aria-hidden="true"></canvas>
 
-    <div class="titles" aria-hidden="true">
-      <div class="title is-vis" data-i="0"><span class="ln">Wonder</span><span class="ln">melon</span></div>
-      <div class="title" data-i="1"><span class="ln">Hurricane</span><span class="ln">Huda</span></div>
-      <div class="title" data-i="2"><span class="ln">Sour Gummy</span><span class="ln">Worm</span></div>
-      <div class="title" data-i="3"><span class="ln">Viva</span><span class="ln">Las Vegas</span></div>
-      <div class="title" data-i="4"><span class="ln">Chocolate</span><span class="ln">Brownie</span></div>
-    </div>
+    <div class="eyebrow mono"><span>Campus Corner · Norman, OK</span><span class="sep">/</span><span>Pick your loadout</span></div>
 
     <div class="huds" aria-hidden="true">
       <div class="hud is-vis" data-i="0">
@@ -73,9 +77,8 @@
           <div><dt>Sweet</dt><dd class="bar" style="--v:.6"><i></i></dd></div>
           <div><dt>Sour</dt><dd class="bar" style="--v:.2"><i></i></dd></div>
         </dl>
-        <svg class="sticker" viewBox="0 0 160 160" aria-hidden="true"><defs><path id="r0" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text><textPath href="#r0">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK · THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan" x="80" y="92">SIPPIN'</text></svg>
+        <svg class="sticker" viewBox="0 0 160 160"><defs><path id="r0" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text textLength="386" lengthAdjust="spacing"><textPath href="#r0">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan" x="80" y="92">SIPPIN'</text></svg>
       </div>
-
       <div class="hud" data-i="1">
         <div class="hud-head mono"><span>Energy tea</span><span>Cup 02</span></div>
         <p class="hud-note">Sapphire on the bottom, violet on top. The storm in a cup.</p>
@@ -84,9 +87,8 @@
           <div><dt>Sweet</dt><dd class="bar" style="--v:.6"><i></i></dd></div>
           <div><dt>Sour</dt><dd class="bar" style="--v:.4"><i></i></dd></div>
         </dl>
-        <svg class="sticker" viewBox="0 0 160 160" aria-hidden="true"><defs><path id="r1" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text><textPath href="#r1">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK · THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">LUCKY ME</text><text class="slogan sm" x="80" y="104">GOTTA TEA</text></svg>
+        <svg class="sticker" viewBox="0 0 160 160"><defs><path id="r1" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text textLength="386" lengthAdjust="spacing"><textPath href="#r1">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">LUCKY ME</text><text class="slogan sm" x="80" y="104">GOTTA TEA</text></svg>
       </div>
-
       <div class="hud" data-i="2">
         <div class="hud-head mono"><span>Energy tea</span><span>Cup 03</span></div>
         <p class="hud-note">Lime into lemon. It puckers first, then it hits.</p>
@@ -95,9 +97,8 @@
           <div><dt>Sweet</dt><dd class="bar" style="--v:.4"><i></i></dd></div>
           <div><dt>Sour</dt><dd class="bar" style="--v:1"><i></i></dd></div>
         </dl>
-        <svg class="sticker" viewBox="0 0 160 160" aria-hidden="true"><defs><path id="r2" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text><textPath href="#r2">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK · THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">TOWER SAYS</text><text class="slogan sm" x="80" y="104">BOOMER!</text></svg>
+        <svg class="sticker" viewBox="0 0 160 160"><defs><path id="r2" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text textLength="386" lengthAdjust="spacing"><textPath href="#r2">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">TOWER SAYS</text><text class="slogan sm" x="80" y="104">BOOMER!</text></svg>
       </div>
-
       <div class="hud" data-i="3">
         <div class="hud-head mono"><span>Energy tea</span><span>Cup 04</span></div>
         <p class="hud-note">Margarita · Strawberry · Cranberry · Limeade. Their words, not ours.</p>
@@ -106,9 +107,8 @@
           <div><dt>Sweet</dt><dd class="bar" style="--v:.6"><i></i></dd></div>
           <div><dt>Sour</dt><dd class="bar" style="--v:.6"><i></i></dd></div>
         </dl>
-        <svg class="sticker" viewBox="0 0 160 160" aria-hidden="true"><defs><path id="r3" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text><textPath href="#r3">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK · THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">XOXO,</text><text class="slogan sm" x="80" y="104">THE TOWER</text></svg>
+        <svg class="sticker" viewBox="0 0 160 160"><defs><path id="r3" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text textLength="386" lengthAdjust="spacing"><textPath href="#r3">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">XOXO,</text><text class="slogan sm" x="80" y="104">THE TOWER</text></svg>
       </div>
-
       <div class="hud" data-i="4">
         <div class="hud-head mono"><span>Protein shake</span><span>Cup 05</span></div>
         <p class="hud-note">Brownie batter with a whipped top. A meal in a cup, and it shows up in the Google reviews.</p>
@@ -117,7 +117,7 @@
           <div><dt>Sweet</dt><dd class="bar" style="--v:.8"><i></i></dd></div>
           <div><dt>Energy</dt><dd class="bar" style="--v:.4"><i></i></dd></div>
         </dl>
-        <svg class="sticker" viewBox="0 0 160 160" aria-hidden="true"><defs><path id="r4" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text><textPath href="#r4">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK · THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">GOOD</text><text class="slogan sm" x="80" y="104">VIBES</text></svg>
+        <svg class="sticker" viewBox="0 0 160 160"><defs><path id="r4" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><circle cx="80" cy="80" r="76" fill="#fff"/><g class="rim"><text textLength="386" lengthAdjust="spacing"><textPath href="#r4">THE TOWER · ENERGY &amp; NUTRITION · NORMAN, OK ·</textPath></text></g><text class="slogan sm" x="80" y="74">GOOD</text><text class="slogan sm" x="80" y="104">VIBES</text></svg>
       </div>
     </div>
 
@@ -138,33 +138,37 @@
   </div>
 </section>
 
-<!-- ============ LANDING ZONE + LINEUP ============ -->
+<div class="ticker" data-theme="dark" aria-hidden="true"><div class="ticker-skew"><div class="ticker-row">
+  <span>Energy teas</span><span class="o">Protein shakes</span><span>Good vibes</span><span class="o">Campus Corner</span><span>Order ahead</span><span class="o">Sticker on every cup</span>
+  <span>Energy teas</span><span class="o">Protein shakes</span><span>Good vibes</span><span class="o">Campus Corner</span><span>Order ahead</span><span class="o">Sticker on every cup</span>
+</div></div></div>
+
+<!-- ============ LINEUP — pinned horizontal run ============ -->
 <section id="lineup" class="lineup" data-theme="dark">
-  <div class="landing" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="kicker mono">The lineup</span>
-      <h2 class="h-display">Five of the regulars.</h2>
-      <p class="lede">The board changes with the season and the sticker changes with the week. These are the ones you keep hearing about.</p>
+  <div class="wrap lineup-head">
+    <span class="kicker mono reveal">The lineup</span>
+    <h2 class="h-display" data-words>Five of the regulars.</h2>
+  </div>
+  <div class="run">
+    <div class="run-bg" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span></div>
+    <div class="track">
+      <a class="hcard" href="#film" data-go="0" style="--c:#FF3B6B"><img src="img/01-card.webp" alt="Wondermelon energy tea, floating with ice" loading="lazy" decoding="async"><span class="hcard-n">01</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Wonder&shy;melon</span><span class="hcard-sub mono">Energy tea · watermelon</span></a>
+      <a class="hcard" href="#film" data-go="1" style="--c:#6B7BFF"><img src="img/02-card.webp" alt="Hurricane Huda energy tea, blue and violet" loading="lazy" decoding="async"><span class="hcard-n">02</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Hurricane Huda</span><span class="hcard-sub mono">Energy tea · blue to violet</span></a>
+      <a class="hcard" href="#film" data-go="2" style="--c:#B5F02A"><img src="img/03-card.webp" alt="Sour Gummy Worm energy tea, lime and lemon" loading="lazy" decoding="async"><span class="hcard-n">03</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Sour Gummy Worm</span><span class="hcard-sub mono">Energy tea · lime, lemon</span></a>
+      <a class="hcard" href="#film" data-go="3" style="--c:#FF2D55"><img src="img/04-card.webp" alt="Viva Las Vegas energy tea, cranberry into limeade" loading="lazy" decoding="async"><span class="hcard-n">04</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Viva Las Vegas</span><span class="hcard-sub mono">Energy tea · margarita, strawberry, cranberry, limeade</span></a>
+      <a class="hcard" href="#film" data-go="4" style="--c:#D9B48F"><img src="img/05-card.webp" alt="Chocolate Brownie protein shake with whipped cream" loading="lazy" decoding="async"><span class="hcard-n">05</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Chocolate Brownie</span><span class="hcard-sub mono">Protein shake · whipped top</span></a>
     </div>
-    <ul class="cards">
-      <li class="card reveal" data-go="0"><a href="#film"><img src="img/01-card.webp" alt="Wondermelon energy tea in a clear Tower cup" loading="lazy" decoding="async"><span class="card-n mono">01</span><span class="card-name">Wondermelon</span><span class="card-sub">Energy tea · watermelon</span></a></li>
-      <li class="card reveal" data-go="1"><a href="#film"><img src="img/02-card.webp" alt="Hurricane Huda energy tea, blue and violet" loading="lazy" decoding="async"><span class="card-n mono">02</span><span class="card-name">Hurricane Huda</span><span class="card-sub">Energy tea · blue to violet</span></a></li>
-      <li class="card reveal" data-go="2"><a href="#film"><img src="img/03-card.webp" alt="Sour Gummy Worm energy tea, lime and lemon" loading="lazy" decoding="async"><span class="card-n mono">03</span><span class="card-name">Sour Gummy Worm</span><span class="card-sub">Energy tea · lime, lemon</span></a></li>
-      <li class="card reveal" data-go="3"><a href="#film"><img src="img/04-card.webp" alt="Viva Las Vegas energy tea, cranberry into limeade" loading="lazy" decoding="async"><span class="card-n mono">04</span><span class="card-name">Viva Las Vegas</span><span class="card-sub">Energy tea · margarita, strawberry, cranberry, limeade</span></a></li>
-      <li class="card reveal" data-go="4"><a href="#film"><img src="img/05-card.webp" alt="Chocolate Brownie protein shake with whipped cream" loading="lazy" decoding="async"><span class="card-n mono">05</span><span class="card-name">Chocolate Brownie</span><span class="card-sub">Protein shake · whipped top</span></a></li>
-    </ul>
   </div>
 </section>
 
 <!-- ============ STORY ============ -->
 <section id="story" class="story" data-theme="light">
-  <span id="lightmark"></span>
+  <div class="bomb" aria-hidden="true"></div>
   <div class="wrap">
     <div class="story-grid">
-      <div class="reveal">
-        <span class="kicker mono">Campus Corner</span>
-        <h2 class="h-display">Five years on the corner.</h2>
+      <div>
+        <span class="kicker mono reveal">Campus Corner</span>
+        <h2 class="h-display" data-words>Five years on the corner.</h2>
       </div>
       <div class="story-copy reveal">
         <p>Energy teas, protein shakes, a green wall, a red couch everybody ends up on. 584 Buchanan Ave, a block off campus, seven days a week.</p>
@@ -172,50 +176,48 @@
       </div>
     </div>
     <ul class="proof reveal">
-      <li><b>5.0</b><span class="mono">Google rating</span></li>
-      <li><b>257</b><span class="mono">Google reviews</span></li>
-      <li><b>13.3K</b><span class="mono">On Instagram</span></li>
-      <li><b>7</b><span class="mono">Days a week</span></li>
+      <li><b data-count="5.0" data-dec="1">0.0</b><span class="mono">Google rating</span></li>
+      <li><b data-count="257">0</b><span class="mono">Google reviews</span></li>
+      <li><b data-count="13.3" data-dec="1" data-suffix="K">0.0K</b><span class="mono">On Instagram</span></li>
+      <li><b data-count="7">0</b><span class="mono">Days a week</span></li>
     </ul>
     <ul class="quotes">
-      <li class="quote reveal"><p>“Ready to tailor the perfect drink for you! Hydration for my athlete and energy for this tired mama. Recommend 10/10.”</p><cite class="mono">Jennie E. · Google</cite></li>
-      <li class="quote reveal"><p>“They helped me pick a flavor of tea that I would like. I got the sour gummy worm tea and it's delicious!!”</p><cite class="mono">Ashlee N. · Google</cite></li>
-      <li class="quote reveal"><p>“I tried the chocolate brownie shake, it was very tasty &amp; fulfilling. I would definitely stop by again.”</p><cite class="mono">Mike G. · Google</cite></li>
+      <li class="quote"><p>“Ready to tailor the perfect drink for you! Hydration for my athlete and energy for this tired mama. Recommend 10/10.”</p><cite class="mono">Jennie E. · Google</cite></li>
+      <li class="quote"><p>“They helped me pick a flavor of tea that I would like. I got the sour gummy worm tea and it's delicious!!”</p><cite class="mono">Ashlee N. · Google</cite></li>
+      <li class="quote"><p>“I tried the chocolate brownie shake, it was very tasty &amp; fulfilling. I would definitely stop by again.”</p><cite class="mono">Mike G. · Google</cite></li>
     </ul>
   </div>
 </section>
 
-<!-- ============ THE BOARD ============ -->
+<!-- ============ THE BOARD — stacking cards ============ -->
 <section id="menu" class="board" data-theme="dark">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="kicker mono">What's on the board</span>
-      <h2 class="h-display">Four ways to fuel.</h2>
-    </div>
-    <ul class="families">
-      <li class="family reveal"><span class="fam-n mono">01</span><h3>Energy Teas</h3><p>The loaded ones. Rotating flavors, seasonal drops, a sticker on every cup.</p></li>
-      <li class="family reveal"><span class="fam-n mono">02</span><h3>Protein Shakes</h3><p>A meal in a cup. Chocolate Brownie is the one the Google reviews name.</p></li>
-      <li class="family reveal"><span class="fam-n mono">03</span><h3>Coffees</h3><p>The morning version. Same counter, same crew, 7am on weekdays.</p></li>
-      <li class="family reveal"><span class="fam-n mono">04</span><h3>Protein Balls</h3><p>Grab a bag for the road. Ask what's in the case today.</p></li>
-    </ul>
-    <p class="board-note reveal">Menu and pricing at the counter or by phone. Say what you're in the mood for and they'll build it.</p>
+  <div class="wrap sec-head">
+    <span class="kicker mono reveal">What's on the board</span>
+    <h2 class="h-display" data-words>Four ways to fuel.</h2>
   </div>
+  <div class="stack">
+    <article class="family" style="--c:#FF3B6B"><div class="fam-copy"><span class="mono">01 / Energy</span><h3>Energy Teas</h3><p>The loaded ones. Rotating flavors, seasonal drops, a sticker on every cup.</p></div><div class="fam-n" aria-hidden="true">01</div></article>
+    <article class="family" style="--c:#D9B48F"><div class="fam-copy"><span class="mono">02 / Fuel</span><h3>Protein Shakes</h3><p>A meal in a cup. Chocolate Brownie is the one the Google reviews name.</p></div><div class="fam-n" aria-hidden="true">02</div></article>
+    <article class="family" style="--c:#FFB347"><div class="fam-copy"><span class="mono">03 / Mornings</span><h3>Coffees</h3><p>The morning version. Same counter, same crew, 7am on weekdays.</p></div><div class="fam-n" aria-hidden="true">03</div></article>
+    <article class="family" style="--c:#B5F02A"><div class="fam-copy"><span class="mono">04 / For later</span><h3>Protein Balls</h3><p>Grab a bag for the road. Ask what's in the case today.</p></div><div class="fam-n" aria-hidden="true">04</div></article>
+  </div>
+  <div class="wrap"><p class="board-note">Menu and pricing at the counter or by phone. Say what you're in the mood for and they'll build it.</p></div>
 </section>
 
 <!-- ============ VISIT ============ -->
 <section id="visit" class="visit" data-theme="light">
   <div class="wrap">
     <div class="visit-grid">
-      <div class="reveal">
-        <span class="kicker mono">Come up</span>
-        <h2 class="h-display">584 Buchanan Ave.</h2>
-        <p class="lede">Campus Corner, Norman, Oklahoma 73069. Takeout, dine-in and in-store pickup.</p>
-        <div class="cta-row">
+      <div>
+        <span class="kicker mono reveal">Come up</span>
+        <h2 class="h-display" data-chars>584 Buchanan Ave.</h2>
+        <p class="lede reveal">Campus Corner, Norman, Oklahoma 73069. Takeout, dine-in and in-store pickup.</p>
+        <div class="cta-row reveal">
           <a class="btn btn-red" href="tel:+14053004086">Order ahead · 405-300-4086</a>
           <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=The+Tower+Energy+and+Nutrition+584+Buchanan+Ave+Norman+OK" target="_blank" rel="noopener">Directions</a>
         </div>
       </div>
-      <dl class="hours reveal">
+      <dl class="hours">
         <div><dt class="mono">Mon – Fri</dt><dd>7:00 am – 7:00 pm</dd></div>
         <div><dt class="mono">Saturday</dt><dd>9:00 am – 5:00 pm</dd></div>
         <div><dt class="mono">Sunday</dt><dd>9:00 am – 6:00 pm</dd></div>
@@ -228,26 +230,38 @@
         <h3>Be a Tower Campus Ambassador.</h3>
         <p>Rep the Tower on campus. Details and applications go through Instagram.</p>
       </div>
-      <a class="btn btn-ink" href="https://www.instagram.com/thetowernutrition/" target="_blank" rel="noopener">Apply on Instagram</a>
+      <a class="badge" href="https://www.instagram.com/thetowernutrition/" target="_blank" rel="noopener" aria-label="Apply on Instagram">
+        <svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="ringp" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"/></defs><text textLength="488" lengthAdjust="spacing"><textPath href="#ringp">APPLY ON INSTAGRAM · TOWER AMBASSADOR ·</textPath></text></svg>
+        <span class="core" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+      </a>
     </div>
   </div>
 </section>
 
+<div class="ticker on-bone" data-theme="light" aria-hidden="true"><div class="ticker-skew"><div class="ticker-row">
+  <span>584 Buchanan Ave</span><span class="o">Norman, OK</span><span>Open 7 days</span><span class="o">405-300-4086</span><span>@thetowernutrition</span><span class="o">Pick your loadout</span>
+  <span>584 Buchanan Ave</span><span class="o">Norman, OK</span><span>Open 7 days</span><span class="o">405-300-4086</span><span>@thetowernutrition</span><span class="o">Pick your loadout</span>
+</div></div></div>
+
+<div class="foot-spacer" data-theme="dark" aria-hidden="true"></div>
 </main>
 
 <footer class="foot" data-theme="dark">
-  <div class="wrap foot-grid">
-    <div class="foot-lockup">
-      <svg class="derrick" viewBox="0 0 24 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 46 10 8M20 46 14 8M9 8h6V4H9zM2 46h20"/><path d="M5.5 38h13M7 30h10M8.3 22h7.4M9.3 15h5.4"/><path d="M5.5 38 17 30M18.5 38 7 30M7 30l8.7-8M17 30l-8.7-8M8.3 22l6.4-7M15.7 22l-6.4-7"/></svg>
-      <div><b>The Tower</b><span>Energy &amp; Nutrition</span></div>
+  <div class="wrap">
+    <p class="foot-word" aria-hidden="true">The <em>Tower</em></p>
+    <div class="foot-grid">
+      <div class="foot-lockup">
+        <svg class="derrick" viewBox="0 0 24 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 46 10 8M20 46 14 8M9 8h6V4H9zM2 46h20"/><path d="M5.5 38h13M7 30h10M8.3 22h7.4M9.3 15h5.4"/><path d="M5.5 38 17 30M18.5 38 7 30M7 30l8.7-8M17 30l-8.7-8M8.3 22l6.4-7M15.7 22l-6.4-7"/></svg>
+        <div><b>The Tower</b><span>Energy &amp; Nutrition</span></div>
+      </div>
+      <address class="mono">584 Buchanan Ave<br>Norman, OK 73069<br><a href="tel:+14053004086">405-300-4086</a></address>
+      <ul class="socials">
+        <li><a href="https://www.instagram.com/thetowernutrition/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.2.8-.4.4-.6.7-.8 1.2-.2.4-.3 1-.4 2.1C2.8 8.5 2.8 8.9 2.8 12s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.2.4.4.7.6 1.2.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.2-.8.4-.4.6-.7.8-1.2.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1-.2-.5-.4-.9-.8-1.2-.4-.4-.7-.6-1.2-.8-.4-.2-1-.3-2.1-.4C15.5 4 15.1 4 12 4zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2zm5.2-2.6a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg></a></li>
+        <li><a href="https://www.tiktok.com/@thetowernutrition" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 2h-3.4v13.3a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.3 6.3 0 1 0 5.4 6.2V8.6a7.4 7.4 0 0 0 4.4 1.4V6.6A4.4 4.4 0 0 1 16.6 2z"/></svg></a></li>
+        <li><a href="https://www.facebook.com/p/The-Tower-Energy-and-Nutrition-100073143002306/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8h3.3z"/></svg></a></li>
+      </ul>
+      <p class="foot-legal mono">© 2026 The Tower Energy and Nutrition · Norman, OK</p>
     </div>
-    <address class="mono">584 Buchanan Ave<br>Norman, OK 73069<br><a href="tel:+14053004086">405-300-4086</a></address>
-    <ul class="socials">
-      <li><a href="https://www.instagram.com/thetowernutrition/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.2.8-.4.4-.6.7-.8 1.2-.2.4-.3 1-.4 2.1C2.8 8.5 2.8 8.9 2.8 12s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.2.4.4.7.6 1.2.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.2-.8.4-.4.6-.7.8-1.2.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1-.2-.5-.4-.9-.8-1.2-.4-.4-.7-.6-1.2-.8-.4-.2-1-.3-2.1-.4C15.5 4 15.1 4 12 4zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2zm5.2-2.6a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg></a></li>
-      <li><a href="https://www.tiktok.com/@thetowernutrition" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 2h-3.4v13.3a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.3 6.3 0 1 0 5.4 6.2V8.6a7.4 7.4 0 0 0 4.4 1.4V6.6A4.4 4.4 0 0 1 16.6 2z"/></svg></a></li>
-      <li><a href="https://www.facebook.com/p/The-Tower-Energy-and-Nutrition-100073143002306/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8h3.3z"/></svg></a></li>
-    </ul>
-    <p class="foot-legal mono">© 2026 The Tower Energy and Nutrition · Norman, OK</p>
   </div>
 </footer>
 

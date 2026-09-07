@@ -1,0 +1,29 @@
+[
+  {
+    "created_at": "2026-09-07T06:20:28.68695Z",
+    "display_name": "Nano Banana Pro",
+    "id": "4a197a7c-0e92-48d0-a7b0-80ae7b773b91",
+    "job_type": "nano_banana_pro",
+    "min_result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/hf_20260907_062028_4a197a7c-0e92-48d0-a7b0-80ae7b773b91_min.webp",
+    "params": {
+      "application": null,
+      "aspect_ratio": "16:9",
+      "batch_size": 1,
+      "height": 1536,
+      "input_image": null,
+      "input_images": [
+        {
+          "id": "4b01b253-c1fd-47d9-8838-164589d65212",
+          "type": "media_input",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/4b01b253-c1fd-47d9-8838-164589d65212_resize.jpg"
+        }
+      ],
+      "prompt": "Use the reference image as the exact product: the identical tall clear 24 oz plastic cup with clear dome lid and black straw, the identical round white sticker reading \"THE TOWER\" and \"ENERGY & NUTRITION\" with the small black lattice tower icon above the words, the identical thick chocolate brownie protein shake with chocolate syrup drizzle streaks inside the cup and a swirl of whipped cream dusted with brownie crumbs under the dome lid, the identical condensation. Now the cup is LEVITATING in a pure black void: no turntable, no table, no floor, no surface, no reflection beneath it. It floats dead center in the frame, perfectly upright, with a few brownie chunks, chocolate chips and drops of chocolate syrup suspended in the air around it as if frozen mid-splash, and a faint warm caramel glow emitted by the drink lighting the nearest ones. Lighting identical to the reference: one soft key light from the upper left and a thin crimson rim light along the right edge of the cup. Background: pure solid black everywhere, no vignette, no gradient, no visible light source, no text other than the sticker, no hands, no people. 16:9 frame, the cup about 70 percent of the frame height, generous empty black space left and right of it. Commercial beverage advertising photograph, razor sharp, ultra detailed.",
+      "resolution": "2k",
+      "surface": null,
+      "width": 2752
+    },
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/hf_20260907_062028_4a197a7c-0e92-48d0-a7b0-80ae7b773b91.png",
+    "status": "completed"
+  }
+]
