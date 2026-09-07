@@ -56,15 +56,18 @@
     queue = front ? items.concat(queue) : queue.concat(items);
     pump();
   }
+  /* frames are fetched as encoded Blobs, never HTMLImageElements: an <img> would sit in Chrome's decoded-image cache
+     (4.7 MB each, 305 of them) on a box that runs with ~1 GB free. The only decoded pixels are the bitmap window. */
   function pump() {
     while (inflight < MAXF && queue.length) {
       var q = queue.shift(), i = q[0], f = q[1], st = store[i];
       if (st.imgs[f]) continue;
-      var im = new Image(); im.decoding = 'async';
-      st.imgs[f] = im; inflight++;
-      im.onload = (function (i) { return function () { inflight--; store[i].loaded++; onLoaded(i); pump(); }; })(i);
-      im.onerror = (function (i, f) { return function () { inflight--; store[i].imgs[f] = null; pump(); }; })(i, f);
-      im.src = src(i, f);
+      st.imgs[f] = 'pending'; inflight++;
+      (function (i, f) {
+        fetch(src(i, f)).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+          .then(function (b) { store[i].imgs[f] = b; inflight--; store[i].loaded++; onLoaded(i); pump(); })
+          .catch(function () { store[i].imgs[f] = null; inflight--; pump(); });
+      })(i, f);
     }
   }
   function onLoaded(i) {
@@ -78,7 +81,7 @@
 
   /* ImageBitmap sliding window, BUDGETED (3 decodes per call, nearest-first) — an un-budgeted window lands as one
      allocation burst = a 150 ms frame. Draws only from decoded bitmaps; never a sync HTMLImageElement decode. */
-  var B_AHEAD = 12, B_KEEP = 18, BUDGET = 2;
+  var B_AHEAD = 8, B_KEEP = 10, BUDGET = 2;   /* 1084x1080 RGBA bitmaps are 4.7 MB each; this box runs with ~1 GB free */
   function ensureBitmaps(i, center) {
     var st = store[i];
     if (!st.n || !window.createImageBitmap) return;
@@ -90,7 +93,7 @@
       for (var c = 0; c < cands.length && budget > 0; c++) {
         var f = cands[c];
         if (f < 0 || f >= st.n || st.bitmaps.has(f) || st.decoding.has(f)) continue;
-        var im = st.imgs[f]; if (!im || !im.complete || !im.naturalWidth) continue;
+        var im = st.imgs[f]; if (!im || im === 'pending') continue;
         st.decoding.add(f); budget--;
         (function (f) {
           createImageBitmap(im).then(function (b) {
@@ -106,13 +109,12 @@
   /* a drink that is neither active nor incoming holds NO decoded bitmaps — five windows of 1280x720 RGBA would be ~800 MB and the GC stalls for a second at a time */
   function release(i) { var st = store[i]; if (!st.bitmaps.size) return; st.bitmaps.forEach(function (b) { b.close(); }); st.bitmaps.clear(); st.center = -999; drawn[i] = -1; }
   function nearest(st, idx) {
-    if (!window.createImageBitmap) { var im = st.imgs[idx]; return (im && im.complete && im.naturalWidth) ? im : null; }
     for (var d = 1; d <= 30; d++) { var a = st.bitmaps.get(idx - d); if (a) return a; var b = st.bitmaps.get(idx + d); if (b) return b; }
     return null;
   }
 
   /* ---------- canvases (alpha) ---------- */
-  var DPR = Math.min(1.25, window.devicePixelRatio || 1);
+  var DPR = Math.min(1.5, window.devicePixelRatio || 1), FXDPR = Math.min(1.25, window.devicePixelRatio || 1);
   var lastFrame = [], drawn = [];
   slots.forEach(function (sl, i) {
     var cv = $('canvas', sl); sl._cv = cv; sl._ctx = cv.getContext('2d', { alpha: true, desynchronized: true });
@@ -131,7 +133,7 @@
     var img = st.bitmaps.get(idx) || nearest(st, idx);
     if (!img) return false;
     var cv = sl._cv, ctx = sl._ctx, iw = img.width, ih = img.height, cw = cv.width, ch = cv.height;
-    var sc = Math.max(cw / iw, ch / ih), dw = iw * sc, dh = ih * sc;
+    var sc = ch / ih, dw = iw * sc, dh = ih * sc;   /* frames are native-res centre crops: fit by HEIGHT, centre; the void is transparent */
     ctx.clearRect(0, 0, cw, ch);
     ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     drawn[i] = idx;
@@ -262,7 +264,7 @@
   function fxTint(accent) { tint = accent; if (!fxOn) return; spriteB = sprite(32, hexA(accent, 0.9), false); spriteF = sprite(96, hexA(accent, 0.55), true); }
   function fxSize() {
     if (!fxOn) return;
-    fxW = Math.round(window.innerWidth * DPR); fxH = Math.round(stage.clientHeight * DPR);
+    fxW = Math.round(window.innerWidth * FXDPR); fxH = Math.round(stage.clientHeight * FXDPR);
     [fxB, fxF].forEach(function (c) { c.width = fxW; c.height = fxH; });
     ctxB = fxB.getContext('2d'); ctxF = fxF.getContext('2d');
     if (!pb.length) {
@@ -286,7 +288,7 @@
         if (p.y < -0.08) { p.y = 1.08; p.x = Math.random(); } if (p.y > 1.08) { p.y = -0.08; p.x = Math.random(); }
         if (p.x < -0.05) p.x = 1.05; if (p.x > 1.05) p.x = -0.05;
         var tw = big ? 1 : 0.6 + 0.4 * Math.sin(t * 2.2 + p.ph);
-        var r = p.r * DPR * (big ? 1 : 1), hgt = r * 2 * streak;
+        var r = p.r * FXDPR, hgt = r * 2 * streak;
         ctx.globalAlpha = p.a * tw * stageAlpha;
         ctx.drawImage(spr, p.x * fxW - r, p.y * fxH - hgt / 2, r * 2, hgt);
       }
