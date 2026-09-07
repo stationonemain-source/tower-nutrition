@@ -74,7 +74,13 @@ affordable with any buffer; 720p is native to the 1280-wide frame payload anyway
   Get the real vector from the owner before this ships.
 
 ## Not done / next
-- Not deployed anywhere. Local only (port 8766). Deploy path when Circle says go: new repo
-  `stationonemain-source/tower-nutrition`, GitHub Pages from `site/` (same shape as downtown-fitness).
+- **LIVE 2026-09-07: https://stationonemain-source.github.io/tower-nutrition/** — repo
+  `stationonemain-source/tower-nutrition`, GitHub Pages serves the `pages` branch (root), which is
+  `site/` split out of `main`. Redeploy after any change to `site/`:
+
+      git subtree split --prefix site -b pages && git push -f origin pages
+
+  (Pages rebuilds in ~40 s; check `curl -sI https://stationonemain-source.github.io/tower-nutrition/`.)
+  Repo created via the REST API with `~/.station/secrets/github_token.txt` — there is no `gh` CLI on this box.
 - No lead form / booking; the CTA is `tel:` + directions. If they want ordering, that's a Toast/Square link.
 - The sticker rim text spins (CSS); slogans are static. Reduced motion stops it.
