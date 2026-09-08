@@ -151,7 +151,7 @@
   /* ---------- transforms ---------- */
   function slotXf(sl, e, dir, bobPx) {
     /* e: 0 = at rest, 1 = fully off-stage; dir: -1 out to the left, +1 in from the right */
-    var x = dir * e * 62, ry = dir * e * 55, rz = dir * e * -9, s = 1 - 0.26 * e;
+    var x = dir * e * 62, ry = dir * e * 55 + (sl._sway || 0) * (1 - e), rz = dir * e * -9, s = 1 - 0.26 * e;
     sl.style.transform = 'translate3d(' + x + 'vw,' + (bobPx || 0) + 'px,0) rotateY(' + ry + 'deg) rotateZ(' + rz + 'deg) scale(' + s + ')';
     sl.style.opacity = String(1 - e);
     sl.style.filter = (!NOBLUR && e > 0.02) ? 'blur(' + (e * 4).toFixed(1) + 'px)' : '';
@@ -211,7 +211,8 @@
       if (k === i) {
         on = true;
         var f = turn * Math.max(0, store[k].n - 1);
-        lastFrame[k] = f; ensureBitmaps(k, Math.round(f)); draw(k, f);
+        if (store[k].n) { lastFrame[k] = f; ensureBitmaps(k, Math.round(f)); draw(k, f); }
+        else sl._sway = Math.sin(turn * Math.PI * 2) * 14;   /* no footage yet: the still sways +-14deg across the turn */
         if (turn > 0.3 && !last) ensureBitmaps(k + 1, 0);
         if (!last) { slotXf(sl, smooth(s), -1, bob * (1 - s)); textOut(t, s, 140, 0); textOut(h, s, 0, 30); }
         else { slotXf(sl, 0, -1, bob); textRest(t); textRest(h); }

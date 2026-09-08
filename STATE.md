@@ -79,6 +79,20 @@ max 94 → 75, slow frames 144 → 4 (the first whip + the lineup pin). Never lo
 headless jank numbers swing 65 ms → 10 s with free RAM. So: frames q78 with no unsharp (~4.5 MB a drink), bitmap
 window ±8 keep 10 (≈50 MB per active cup, was ≈85), and judge smoothness on a machine with headroom too.
 
+## v3.3 — THE REAL CUP HAS A FLAT LID (2026-09-07, Circle caught it)
+Every generated cup had a dome lid; The Tower's real cups (their IG/Google photos) are clear cups with a FLAT
+sip lid and a straw through it. Fixed at the source: `keyframes/flat/` = the five floating stills regenerated
+with Nano Banana Pro using each dome still as the reference and "change ONLY the lid" (2 credits each, 10).
+Then re-filmed what the balance allowed: **01 Wondermelon Kling 1080p + matte + 2K upscale, 02 Hurricane Huda
+Kling 720p + matte + 2K upscale** (`clips/flat/`). Balance 36.1 → **6.2** — cups 03/04/05 have NO flat-lid
+footage yet. The engine has a still path: a drink with 0 frames in `manifest.js` keeps its flat-lid poster and
+sways ±14° across its turn (`sl._sway` in `render()`), so no dome lid appears anywhere on the site.
+To finish: 3 × (Kling 720p 7.5 + remover 1 + upscale 0.2) ≈ 26 Higgsfield credits, or film them on Circle's own
+Kling account (`gen-kling-flat720.sh <name> keyframes/flat/<name>.png "$(cat clips/float/kling.prompt.txt)"`
+is the exact recipe; drop the mp4 in `clips/flat/`, run the remover, then `./assemble-float.sh <name>`).
+`assemble-float.sh` now reads `clips/flat/` + `keyframes/flat/`, and the poster silhouette is a CLOSING
+(dilate×12 → erode×12) so the sticker text no longer punches see-through holes in the stills.
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed
