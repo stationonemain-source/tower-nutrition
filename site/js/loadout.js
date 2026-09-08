@@ -27,12 +27,13 @@
   if (FLAT) document.documentElement.classList.add('flat');
   if (RM) document.documentElement.classList.add('rm');
 
+  /* accents sampled from the real cup photos, in lineup order */
   var DRINKS = [
-    { id: '01', accent: '#FF3B6B' },
-    { id: '02', accent: '#6B7BFF' },
-    { id: '03', accent: '#B5F02A' },
-    { id: '04', accent: '#FF2D55' },
-    { id: '05', accent: '#D9B48F' }
+    { id: '01', accent: '#FF2D3F' },
+    { id: '02', accent: '#B5F02A' },
+    { id: '03', accent: '#F2A93B' },
+    { id: '04', accent: '#35B7E8' },
+    { id: '05', accent: '#FF4D7E' }
   ];
   var N = DRINKS.length;
   var FR = window.FRAMES || {};
@@ -130,17 +131,18 @@
   var DPR = Math.min(LITE ? 1.25 : 1.5, window.devicePixelRatio || 1), FXDPR = Math.min(LITE ? 1 : 1.25, window.devicePixelRatio || 1);
   var lastFrame = [], drawn = [];
   slots.forEach(function (sl, i) {
-    var cv = $('canvas', sl); sl._cv = cv; sl._ctx = cv.getContext('2d', { alpha: true, desynchronized: true });
+    var cv = $('canvas', sl);            /* real-photo stills carry no canvas; the frame engine below no-ops */
+    sl._cv = cv; sl._ctx = cv ? cv.getContext('2d', { alpha: true, desynchronized: true }) : null;
     lastFrame[i] = 0; drawn[i] = -1;
   });
   function size() {
     var w = Math.round(window.innerWidth * DPR), h = Math.round(stage.clientHeight * DPR);
-    slots.forEach(function (sl, i) { if (sl._cv.width !== w || sl._cv.height !== h) { sl._cv.width = w; sl._cv.height = h; drawn[i] = -1; } });
+    slots.forEach(function (sl, i) { if (!sl._cv) return; if (sl._cv.width !== w || sl._cv.height !== h) { sl._cv.width = w; sl._cv.height = h; drawn[i] = -1; } });
     fxSize();
   }
   function draw(i, f, force) {
     var st = store[i], sl = slots[i];
-    if (!st.n) return false;
+    if (!st.n || !sl._cv) return false;
     var idx = clamp(Math.round(f), 0, st.n - 1);
     if (!force && drawn[i] === idx) return true;
     var img = st.bitmaps.get(idx) || nearest(st, idx);
@@ -164,8 +166,11 @@
   /* ---------- transforms ---------- */
   function slotXf(sl, e, dir, bobPx) {
     /* e: 0 = at rest, 1 = fully off-stage; dir: -1 out to the left, +1 in from the right */
-    var x = dir * e * 62, ry = LITE ? 0 : dir * e * 55 + (sl._sway || 0) * (1 - e), rz = LITE ? 0 : dir * e * -9, s = 1 - 0.26 * e;
-    sl.style.transform = 'translate3d(' + x + 'vw,' + (bobPx || 0) + 'px,0) rotateY(' + ry + 'deg) rotateZ(' + rz + 'deg) scale(' + s + ')';
+    var rest = 1 - e;
+    var x = dir * e * 62, ry = LITE ? 0 : dir * e * 55, rz = (LITE ? 0 : dir * e * -9) + (sl._sway || 0) * rest;
+    var s = (1 - 0.26 * e) * (sl._zoom || 1);
+    bobPx = (bobPx || 0) + (sl._drift || 0) * rest;
+    sl.style.transform = 'translate3d(' + x + 'vw,' + bobPx.toFixed(1) + 'px,0) rotateY(' + ry + 'deg) rotateZ(' + rz.toFixed(2) + 'deg) scale(' + s.toFixed(3) + ')';
     sl.style.opacity = String(1 - e);
     sl.style.filter = (!NOBLUR && !LITE && e > 0.02) ? 'blur(' + (e * 4).toFixed(1) + 'px)' : '';
   }
@@ -226,7 +231,11 @@
         on = true;
         var f = turn * Math.max(0, store[k].n - 1);
         if (store[k].n) { lastFrame[k] = f; ensureBitmaps(k, Math.round(f)); draw(k, f); }
-        else sl._sway = Math.sin(turn * Math.PI * 2) * 14;   /* no footage yet: the still sways +-14deg across the turn */
+        else {                              /* real-photo still: rock, drift and breathe across its own segment */
+          sl._sway = Math.sin(turn * Math.PI * 2) * 5;
+          sl._drift = (0.5 - turn) * 30;
+          sl._zoom = 1 + Math.sin(turn * Math.PI) * 0.05;
+        }
         if (turn > 0.3 && !last) ensureBitmaps(k + 1, 0);
         if (!last) { slotXf(sl, smooth(s), -1, bob * (1 - s)); textOut(t, s, 140, 0); textOut(h, s, 0, 30); }
         else { slotXf(sl, 0, -1, bob); textRest(t); textRest(h); }

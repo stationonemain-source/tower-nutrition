@@ -166,6 +166,46 @@ about 1,600 px shorter, and one ScrollTrigger pin is gone.
   accent clears 4.5:1 on black). accesslint live: **0 violations**.
 - Mobile 4× CPU-throttled, no GPU: p95 **28.9 ms**, max 85.5, 5 frames over 50 (was p95 46 with the pin).
 
+## v4.0 — REAL CUPS. Every generated cup is gone (2026-09-08)
+Circle: "swap in real cup photos." The five hero cups are now The Tower's OWN photography, cut out of their
+Instagram/Google posts in `photos/raw/` (64 saved). No generated cup appears anywhere on the site any more.
+
+| Slot | Drink | Source | Sticker |
+|---|---|---|---|
+| 01 | Skittles | g21, their own flavour card | SIPPIN' |
+| 02 | Tropical Splash | g22, their own flavour card | SIPPIN' |
+| 03 | Bubbles | g42, their own flavour card | THE TOWER |
+| 04 | Caribbean Paradise | g61, their own flavour card | THE TOWER |
+| 05 | Açaí Berry | g02, National Hydration Day post | SIPPIN' |
+
+Every name is theirs, every sticker is the real one, every lid is the real flat lid, and each is a real hand
+holding a real cup. **`cut-cup.sh` does the cutout** and its shape is hard-won:
+- Their product shots are on white, so: threshold (background→0), flood the EXTERIOR to 128, keep everything
+  that is not 128. Interior whites (the sticker, the lid, ice) are enclosed and survive.
+- **Chaining `lutyuv` straight into `floodfill` in one graph silently leaves the seed unfilled.** Every stage is
+  written to a file and re-read. Do not "tidy" it back into one filter chain.
+- **A full-height cup splits the background into disconnected pockets**, so it seeds TEN points (four corners,
+  four edge midpoints, two right-edge quarters). One seed only ever clears the region it lands in.
+- Threshold is a parameter because pale subjects need it raised. The **chocolate shake could not be keyed at
+  any threshold** — the shake is cream-coloured and reads as background with no boundary. That is why slot 05
+  is Açaí Berry, not the shake. A shake needs a photo on a non-white background, or a real matte.
+- Preview any new cutout over `verify/` on colour before trusting it; `corner-alpha=00` alone is not proof.
+
+Knock-on changes:
+- **The whole frame engine is dormant.** `manifest.js` is `{}`, `site/frames*` deleted, the slots carry a
+  `<picture>` instead of a `<canvas>`. The canvas lookups are null-guarded so the engine no-ops rather than
+  throwing. The still path drives everything: each cup rocks ±5°, drifts 30 px and breathes 5 % across its own
+  segment, plus the global idle bob, and the code swipe still moves between drinks.
+- **Site went 35 MB → 5.2 MB.** All five cups together are 504 KB. Nothing to lag on.
+- **The invented stat bars are gone.** Energy/Sweet/Sour encoded quantities nobody had measured. The HUD now
+  lists only what the photo itself proves: the drink type, the name as they write it, and which sticker is on
+  the cup.
+- Accents resampled from the real cups: red / lime / amber / cyan / pink.
+- Mobile: cup at 52 % height, title bottom padding 228 px so two-line names clear the info panel (tightest gap
+  is Caribbean Paradise at 15 px).
+- The three re-filmed Kling clips are now moot — nothing on the site uses generated footage. They remain in the
+  Kling account if a rotation is ever wanted again.
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed
