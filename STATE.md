@@ -105,6 +105,21 @@ Higgsfield balance now **2.6 credits**. `manifest.js` has 61 frames for all five
 Kling result videos are served from a service-worker cache — they never appear in the network log or resource
 timing, so the download button is the only retrieval path from the web app.
 
+## v3.5 — MOBILE (2026-09-08, "it wasn't loading correctly" on Circle's phone)
+Root cause most likely **stale cache**: `index.html` changed across every version while `css/site.css` and
+`js/loadout.js` had no cache-buster, so a phone that had visited before ran the OLD engine against NEW markup.
+Every CSS/JS URL now carries `?v=YYYYMMDDHHMM` — bump it (the deploy step does) whenever those files change.
+Plus a real mobile path, `LITE` in loadout.js (min(innerWidth, innerHeight) < 820, or touch + width < 1100):
+- `site/frames-m/` — the same frames at 616 tall, q74 (13 MB total; a phone draws the cup ~620 px tall, so this
+  is native). Built from `frames/` with one ffmpeg line in `assemble-float.sh`'s tail (rebuild after any frame change).
+- loads only cups 0 + 1 at boot (~6 MB), the rest as chapters approach; bitmap window 6/8; canvas DPR cap 1.25,
+  fx canvases 1.0; particles 24/4; no swipe blur; `decodeBlob()` falls back to an `<img>` when
+  `createImageBitmap(blob)` rejects (older Safari).
+- cup drawn at 70 % of the stage height, pushed 3 % down (`CUP`/`CUPY`), poster sized the same in CSS, so the top
+  name line clears the lid; `<picture>` serves a 1100-tall hero poster on phones.
+Verified in the Browser pane at 375×812 (Pixel UA, touch): ready, no console errors, scrollWidth 375, frames-m
+served (frames/ untouched on desktop), lineup pin swipes horizontally.
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed

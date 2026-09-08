@@ -17,6 +17,11 @@
   var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var STATIC = RM || FLAT;
   var TOUCH = window.matchMedia('(hover: none)').matches;
+  /* LITE = phones and small tablets: half-size frames, smaller cup, fewer particles, no swipe blur, load only what is near */
+  var LITE = Math.min(window.innerWidth, window.innerHeight) < 820 || (TOUCH && window.innerWidth < 1100);
+  var FRAMEDIR = LITE ? 'frames-m/' : 'frames/';
+  var CUP = LITE ? 0.70 : 1;          /* fraction of the stage height the cup frame is drawn at */
+  var CUPY = LITE ? 0.03 : 0;         /* push the cup down a touch on phones so the top name line clears the lid */
   if (JUMP !== null) { try { history.scrollRestoration = 'manual'; } catch (e) {} }
   document.documentElement.classList.remove('no-js');
   if (FLAT) document.documentElement.classList.add('flat');
@@ -48,7 +53,7 @@
     return { n: n, imgs: new Array(n), loaded: 0, bitmaps: new Map(), decoding: new Set(), center: -999 };
   });
   var queue = [], inflight = 0, MAXF = 8;
-  function src(i, f) { return 'frames/' + DRINKS[i].id + '/f_' + String(f + 1).padStart(3, '0') + '.webp'; }
+  function src(i, f) { return FRAMEDIR + DRINKS[i].id + '/f_' + String(f + 1).padStart(3, '0') + '.webp'; }
   function enqueue(i, front) {
     var st = store[i], items = [];
     for (var f = 0; f < st.n; f++) if (!st.imgs[f]) items.push([i, f]);
@@ -81,10 +86,18 @@
 
   /* ImageBitmap sliding window, BUDGETED (3 decodes per call, nearest-first) — an un-budgeted window lands as one
      allocation burst = a 150 ms frame. Draws only from decoded bitmaps; never a sync HTMLImageElement decode. */
-  var B_AHEAD = 8, B_KEEP = 10, BUDGET = 2;   /* 1084x1080 RGBA bitmaps are 4.7 MB each; this box runs with ~1 GB free */
+  var B_AHEAD = LITE ? 6 : 8, B_KEEP = LITE ? 8 : 10, BUDGET = 2;   /* 1084x1080 RGBA bitmaps are 4.7 MB each; this box runs with ~1 GB free */
+  /* decode: createImageBitmap(blob) everywhere modern; older Safari gets an <img> from an object URL */
+  function decodeBlob(b) {
+    if (window.createImageBitmap) return createImageBitmap(b).catch(function () { return decodeImg(b); });
+    return decodeImg(b);
+  }
+  function decodeImg(b) {
+    return new Promise(function (res, rej) { var u = URL.createObjectURL(b), im = new Image(); im.onload = function () { URL.revokeObjectURL(u); im.close = function () {}; res(im); }; im.onerror = function () { URL.revokeObjectURL(u); rej(new Error('decode')); }; im.src = u; });
+  }
   function ensureBitmaps(i, center) {
     var st = store[i];
-    if (!st.n || !window.createImageBitmap) return;
+    if (!st.n) return;
     st.center = center;
     st.bitmaps.forEach(function (b, k) { if (k < center - B_KEEP || k > center + B_KEEP) { b.close(); st.bitmaps.delete(k); } });
     var budget = BUDGET;
@@ -96,7 +109,7 @@
         var im = st.imgs[f]; if (!im || im === 'pending') continue;
         st.decoding.add(f); budget--;
         (function (f) {
-          createImageBitmap(im).then(function (b) {
+          decodeBlob(im).then(function (b) {
             st.decoding.delete(f);
             if (Math.abs(f - st.center) > B_KEEP) { b.close(); return; }
             st.bitmaps.set(f, b);
@@ -114,7 +127,7 @@
   }
 
   /* ---------- canvases (alpha) ---------- */
-  var DPR = Math.min(1.5, window.devicePixelRatio || 1), FXDPR = Math.min(1.25, window.devicePixelRatio || 1);
+  var DPR = Math.min(LITE ? 1.25 : 1.5, window.devicePixelRatio || 1), FXDPR = Math.min(LITE ? 1 : 1.25, window.devicePixelRatio || 1);
   var lastFrame = [], drawn = [];
   slots.forEach(function (sl, i) {
     var cv = $('canvas', sl); sl._cv = cv; sl._ctx = cv.getContext('2d', { alpha: true, desynchronized: true });
@@ -133,9 +146,9 @@
     var img = st.bitmaps.get(idx) || nearest(st, idx);
     if (!img) return false;
     var cv = sl._cv, ctx = sl._ctx, iw = img.width, ih = img.height, cw = cv.width, ch = cv.height;
-    var sc = ch / ih, dw = iw * sc, dh = ih * sc;   /* frames are native-res centre crops: fit by HEIGHT, centre; the void is transparent */
+    var sc = ch / ih * CUP, dw = iw * sc, dh = ih * sc;   /* native-res centre crops: fit by HEIGHT (x CUP on phones), centred; the void is transparent */
     ctx.clearRect(0, 0, cw, ch);
-    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2 + ch * CUPY, dw, dh);
     drawn[i] = idx;
     if (!sl.classList.contains('is-live')) sl.classList.add('is-live');
     return true;
@@ -151,10 +164,10 @@
   /* ---------- transforms ---------- */
   function slotXf(sl, e, dir, bobPx) {
     /* e: 0 = at rest, 1 = fully off-stage; dir: -1 out to the left, +1 in from the right */
-    var x = dir * e * 62, ry = dir * e * 55 + (sl._sway || 0) * (1 - e), rz = dir * e * -9, s = 1 - 0.26 * e;
+    var x = dir * e * 62, ry = LITE ? 0 : dir * e * 55 + (sl._sway || 0) * (1 - e), rz = LITE ? 0 : dir * e * -9, s = 1 - 0.26 * e;
     sl.style.transform = 'translate3d(' + x + 'vw,' + (bobPx || 0) + 'px,0) rotateY(' + ry + 'deg) rotateZ(' + rz + 'deg) scale(' + s + ')';
     sl.style.opacity = String(1 - e);
-    sl.style.filter = (!NOBLUR && e > 0.02) ? 'blur(' + (e * 4).toFixed(1) + 'px)' : '';
+    sl.style.filter = (!NOBLUR && !LITE && e > 0.02) ? 'blur(' + (e * 4).toFixed(1) + 'px)' : '';
   }
   function textOut(el, s, dx, dy) { var e = smooth(s * 2); el.style.transform = 'translate3d(' + (-dx * e) + 'px,' + (dy * e) + 'px,0)'; el.style.opacity = String(1 - e); }
   function textIn(el, s, dx, dy) { var e = 1 - smooth((s - 0.5) * 2); el.style.transform = 'translate3d(' + (dx * e) + 'px,' + (dy * e) + 'px,0)'; el.style.opacity = String(1 - e); }
@@ -169,7 +182,8 @@
     dots.forEach(function (d, j) { d.classList.toggle('is-on', j === k); d.setAttribute('aria-selected', j === k ? 'true' : 'false'); });
     if (hasGsap) {
       if (accentTween) accentTween.kill();
-      accentTween = gsap.to(root, { '--accent': DRINKS[k].accent, duration: 0.55, ease: 'power2.out' });
+      if (LITE) root.style.setProperty('--accent', DRINKS[k].accent);   /* a tween on a :root var restyles the whole page every frame — too much for a phone */
+      else accentTween = gsap.to(root, { '--accent': DRINKS[k].accent, duration: 0.55, ease: 'power2.out' });
       var bars = $$('.bar i', huds[k]);
       gsap.killTweensOf(bars);
       gsap.fromTo(bars, { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: 'steps(5)', stagger: 0.07 });
@@ -227,9 +241,8 @@
       if (!on) { sl.style.transform = ''; sl.style.opacity = ''; sl.style.filter = ''; textRest(t); textRest(h); release(k); }
     }
     stage.style.opacity = last ? String(1 - smooth(s)) : '';
-    headTheme();
   }
-  var lastT = 0;
+  var lastT = 0, tickN = 0;
   function tick(time) {
     var now = performance.now(), dt = lastT ? Math.min(50, now - lastT) : 16; lastT = now;
     var y = window.scrollY; velT = clamp((y - lastY) / Math.max(1, window.innerHeight) * 12, -1, 1); lastY = y;
@@ -238,6 +251,7 @@
     U += (uT - U) * (settled ? 0.16 : 1);
     if (Math.abs(uT - U) < 0.0004) U = uT;
     if (stageVisible) { render(dt); fxTick(dt); }
+    if ((++tickN & 3) === 0 || !stageVisible) headTheme();
     tickerSkew();
   }
 
@@ -254,6 +268,7 @@
 
   /* ---------- particles (two canvases: behind the cup, in front) ---------- */
   var fxB = $('.fx-back'), fxF = $('.fx-front'), fxOn = !STATIC && !NOFX && fxB && fxF;
+  if (LITE && fxF) { fxF.style.display = 'none'; }
   var pb = [], pf = [], spriteB, spriteF, fxW = 0, fxH = 0, ctxB, ctxF, tint = DRINKS[0].accent;
   function sprite(size, color, soft) {
     var c = document.createElement('canvas'); c.width = c.height = size;
@@ -269,8 +284,8 @@
     [fxB, fxF].forEach(function (c) { c.width = fxW; c.height = fxH; });
     ctxB = fxB.getContext('2d'); ctxF = fxF.getContext('2d');
     if (!pb.length) {
-      for (var i = 0; i < 70; i++) pb.push({ x: Math.random(), y: Math.random(), r: 1 + Math.random() * 2.2, vy: 0.00025 + Math.random() * 0.0006, ph: Math.random() * 6.28, a: 0.25 + Math.random() * 0.55, d: 0.2 + Math.random() * 0.6 });
-      for (var j = 0; j < 8; j++) pf.push({ x: Math.random(), y: Math.random(), r: 14 + Math.random() * 30, vy: 0.0006 + Math.random() * 0.0009, ph: Math.random() * 6.28, a: 0.10 + Math.random() * 0.18, d: 0.8 + Math.random() * 0.7 });
+      for (var i = 0; i < (LITE ? 24 : 70); i++) pb.push({ x: Math.random(), y: Math.random(), r: 1 + Math.random() * 2.2, vy: 0.00025 + Math.random() * 0.0006, ph: Math.random() * 6.28, a: 0.25 + Math.random() * 0.55, d: 0.2 + Math.random() * 0.6 });
+      for (var j = 0; j < (LITE ? 4 : 8); j++) pf.push({ x: Math.random(), y: Math.random(), r: 14 + Math.random() * 30, vy: 0.0006 + Math.random() * 0.0009, ph: Math.random() * 6.28, a: 0.10 + Math.random() * 0.18, d: 0.8 + Math.random() * 0.7 });
     }
   }
   var fxScroll = 0;
@@ -294,7 +309,7 @@
         ctx.drawImage(spr, p.x * fxW - r, p.y * fxH - hgt / 2, r * 2, hgt);
       }
     }
-    run(ctxB, pb, spriteB, false); run(ctxF, pf, spriteF, true);
+    run(ctxB, pb, spriteB, false); if (!LITE) run(ctxF, pf, spriteF, true);
     ctxB.globalAlpha = 1; ctxF.globalAlpha = 1;
   }
 
@@ -472,7 +487,7 @@
       finish(0);
       return;
     }
-    for (var q = 0; q < N; q++) enqueue(q, false);
+    if (LITE) { enqueue(0, true); enqueue(1, false); } else { for (var q = 0; q < N; q++) enqueue(q, false); }
     ensureBitmaps(0, 0);
 
     if (hasGsap && !NOLENIS && JUMP === null && typeof Lenis !== 'undefined') {
