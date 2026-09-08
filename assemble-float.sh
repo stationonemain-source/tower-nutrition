@@ -10,6 +10,13 @@ for N in $NAMES; do
   [ -r "clips/flat/$N-up.mp4" ] && SRC="clips/flat/$N-up.mp4"   # Bytedance 2K upscale of the same clip, if present
   [ -r "$SRC" ] || { echo "[$N] no flat-lid clip yet — frames skipped (still path)"; rm -rf site/frames/$ID; }
   OUT=site/frames/$ID
+  if [ -r "$SRC" ] && [ ! -r "$MAT" ]; then
+    # FREE silhouette when no remover matte exists: blur → luma threshold → closing (fills the sticker text) — the cup and
+    # ice are bright, the baked glow halo is dark, so the threshold keeps the former and drops the latter.
+    echo "[$N] no remover matte — building a free luma silhouette"
+    # blur → threshold → close small gaps → flood the EXTERIOR from (0,0) with grey → everything not grey is subject (holes filled)
+    ffmpeg -y -v error -i "$SRC" -vf "format=gray,boxblur=3:1,lutyuv=y='if(gt(val,58),255,0)',dilation,dilation,dilation,floodfill=x=0:y=0:s0=0:s1=0:s2=0:s3=0:d0=128:d1=128:d2=128:d3=128,lutyuv=y='if(eq(val,128),0,255)',erosion,erosion,erosion" -c:v libx264 -crf 12 -pix_fmt yuv420p "clips/flat/$N-alpha.mp4" && MAT="clips/flat/$N-alpha.mp4"
+  fi
   if [ -r "$SRC" ] && [ -r "$MAT" ]; then rm -rf "$OUT"; mkdir -p "$OUT"
     ffmpeg -v error -i "$SRC" -i "$MAT" -filter_complex "[1:v]format=gray,lutyuv=y='if(gt(val,10),255,0)',boxblur=1:1[A0];[0:v]format=rgba,$LOOSE,alphaextract[B];[A0][B]scale2ref[A][B2];[A][B2]blend=all_mode=lighten,format=gray[M];[0:v][M]alphamerge,select='not(mod(n\,2))',crop=iw*0.56:ih:iw*0.22:0,scale=-2:1080:flags=lanczos" -vsync vfr -c:v libwebp -pix_fmt yuva420p -quality 78 -compression_level 5 "$OUT/f_%03d.webp"
     echo "[$N] frames: $(ls "$OUT" | wc -l) (union)  $(du -sh $OUT | cut -f1)"

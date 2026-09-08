@@ -120,6 +120,30 @@ Plus a real mobile path, `LITE` in loadout.js (min(innerWidth, innerHeight) < 82
 Verified in the Browser pane at 375×812 (Pixel UA, touch): ready, no console errors, scrollWidth 375, frames-m
 served (frames/ untouched on desktop), lineup pin swipes horizontally.
 
+## v3.6 — lids that LIFT mid-turn, phone perf, Station credit (2026-09-08)
+- `verify/lids_all.jpg` (7 frames per cup, built from `frames/`): 01 and 05 keep the flat lid flat; **02, 03, 04 let the
+  lid bulge into a shallow dome mid-rotation** (Kling drifts toward the dome it has seen most). Re-filmed those three on
+  Circle's Kling with the prompt extended: "The FLAT clear lid stays perfectly flat and pressed flush onto the rim of the
+  cup for the entire clip: it never lifts, never bulges, never becomes a dome, and the straw stays fixed through it."
+  Driven through script this time because Chrome was minimised (visibilityState hidden, 0×0 viewport): `file_upload`
+  on the input ref still registers the start frame, the textarea takes the native-setter + `input` event, and
+  `button.click()` submits; the Native Audio toggle does NOT respond while hidden, so these three ran with audio ON
+  (60 Kling credits each instead of 40 — the audio track is discarded by the pipeline). Check the new clips with the
+  same lid sheet before assembling; if a lid still domes, add an end frame = the start image (frame-mode supports it).
+- Phone perf (LITE): no rotateY/rotateZ in the swipe, front particle canvas off, `headTheme()` every 4th tick, accent
+  swapped instantly instead of tweening a :root var (that tween restyled the whole page every frame). Headless with a
+  4× CPU throttle and NO GPU: p95 ≈ 46 ms — an upper bound, the alpha canvases composite in software there.
+- Footer: "Designed and hosted by Station.Solutions" → https://station.solutions (`.foot-credit`), verified live.
+- Every deploy re-stamps `?v=` on css/js (see the deploy command in v3.5) — do not skip it.
+
+## v3.7 — the footer was UNCLICKABLE (2026-09-08)
+The curtain footer is `position:fixed; z-index:0`, revealed as `main` (`position:relative; z-index:1`) scrolls
+off it. `.foot-spacer` had `pointer-events:none`, but **`main` itself did not** — so `elementFromPoint` over the
+footer returned `MAIN`, and every footer link (Station credit, the three socials, AND the phone number) was dead.
+Fix: `main{pointer-events:none}` + `main>*{pointer-events:auto}`, so main is click-through only where it is
+transparent. Verified with `elementFromPoint` at each link centre, desktop 1440 and mobile 390: all hit their own
+`<a>`. Any future fixed element under `main` has the same hazard — test by hit-testing, never by looking.
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed
