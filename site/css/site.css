@@ -243,6 +243,8 @@ main{position:relative;z-index:1}
 .socials a:hover{background:var(--bone);color:var(--ink)}
 .socials svg{width:18px;height:18px}
 .foot-legal{grid-column:1/-1;margin:28px 0 0;opacity:.5}
+.foot-credit a{color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor}
+.foot-credit a:hover{color:var(--bone)}
 .foot-spacer{height:var(--foot-h,600px);pointer-events:none}
 
 /* ---------- reveals ---------- */
