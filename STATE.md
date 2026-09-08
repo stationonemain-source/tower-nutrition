@@ -206,6 +206,23 @@ Knock-on changes:
 - The three re-filmed Kling clips are now moot — nothing on the site uses generated footage. They remain in the
   Kling account if a rotation is ever wanted again.
 
+## v4.1 — real drinks, NO hands (2026-09-08, Circle: "go back to the other format but use the real drinks")
+v4.0 put their own photos in, but every one is a hand holding a cup, and the format Circle wanted is the clean
+floating cup on black. Their library has exactly ONE hand-free single-cup photo (g03 Memorial Day Tea), so the
+hands had to come out of the other shots.
+- Skin tones across the five run 0x6c5548 to 0xe1c39d — too wide to colour-key, and they overlap the amber
+  Bubbles cup. Keying was never going to work.
+- **`kling_omni_image` (Kling O1 Image) removes them for 0.5 credits each**, the cheapest image editor on the
+  account by 2x. Prompt: remove the hand/fingers/rings, rebuild the covered part of the cup, keep the drink,
+  layers, ice, flat lid, sticker lettering and lighting pixel-identical, plain background. All five came back
+  with the drink and the SIPPIN' / THE TOWER stickers intact. Sources in `keyframes/nohand/`.
+- These are still their real drinks and their real stickers; only the hand is repaired. That is a different
+  thing from the generated cups v3.x used, which invented the product itself.
+- **Higgsfield balance is now 0.1 credits.** Nothing further can be generated there without a top-up. Kling has
+  ~2.7k credits and is the cheaper route for images anyway.
+- Cutouts rebuilt from the hand-free versions with the same `cut-cup.sh`; site images regenerated at 1200 /
+  760 / 520 tall.
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed

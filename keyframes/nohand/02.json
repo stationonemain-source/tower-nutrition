@@ -1,0 +1,26 @@
+[
+  {
+    "created_at": "2026-09-08T22:28:22.139032Z",
+    "display_name": "Kling O1 Image",
+    "id": "7675a51b-a394-4180-a8d5-6782c645303d",
+    "job_type": "kling_omni_image",
+    "min_result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/hf_20260908_222822_7675a51b-a394-4180-a8d5-6782c645303d_min.webp",
+    "params": {
+      "aspect_ratio": "auto",
+      "batch_size": 1,
+      "height": 2944,
+      "input_images": [
+        {
+          "id": "61519da3-cf1a-4536-b476-ff9628fffd9a",
+          "type": "media_input",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/61519da3-cf1a-4536-b476-ff9628fffd9a.png"
+        }
+      ],
+      "prompt": "Use the reference photo exactly. Remove the hand and fingers completely so the cup stands alone with nothing holding it, and rebuild the small parts of the cup the hand was covering so the cup is whole and unbroken. Keep everything else pixel-identical: the same cup, the same drink and its exact colours and layers, the same ice, the same flat clear lid, the same round SIPPIN sticker with its lettering, the same lighting and reflections. Place the cup on a pure solid black background. No hand, no fingers, no arm, no table, no surface, no shadow under the cup, no added text.",
+      "resolution": "2k",
+      "width": 1472
+    },
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3GooZ122UjwPglp2NikT13oW84l/hf_20260908_222822_7675a51b-a394-4180-a8d5-6782c645303d.png",
+    "status": "completed"
+  }
+]
