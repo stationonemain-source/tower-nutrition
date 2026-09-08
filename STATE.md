@@ -144,6 +144,28 @@ Fix: `main{pointer-events:none}` + `main>*{pointer-events:auto}`, so main is cli
 transparent. Verified with `elementFromPoint` at each link centre, desktop 1440 and mobile 390: all hit their own
 `<a>`. Any future fixed element under `main` has the same hazard — test by hit-testing, never by looking.
 
+## v3.8 — lineup section CUT, word-safe headings, mobile audit #2 (2026-09-08)
+Circle: the film already walks you through all five drinks, so the "Five of the regulars" section repeated the
+same information and made the page longer for no gain. **Removed `#lineup` entirely** (section, nav link, the
+pinned horizontal run in `choreography()`, and its CSS block). Page height at 375 px went 19,039 → 17,424,
+about 1,600 px shorter, and one ScrollTrigger pin is gone.
+- **The drink names still exist for search and screen readers**: an `sr-only` list of all five names +
+  descriptions sits right after the page `h1`. Do not delete it — the visual titles are `aria-hidden`, and
+  flavour names ("sour gummy worm tea Norman") are exactly what people search. `img/NN-card.webp` is now unused
+  by the page but kept, it is what a future gallery or social crop would use.
+- **"584 Buchanan Ave." broke mid-word.** `splitChars()` made every character its own `inline-block`, so the
+  browser could break a line between any two letters and orphaned the "E." of "AVE.". Now it splits into words
+  first, chars inside each, and `.h-display .cw{display:inline-block;white-space:nowrap}` makes each word
+  unbreakable. Verified at 320/360/375/390/414/430: breaks only at spaces, no overflow at any width.
+- **Header scrim.** The fixed header is transparent and display headings passed under it illegibly (worst on the
+  cream sections). `.top::before` is now a top-down scrim, black on dark sections, cream under `.on-light`.
+- **Tap targets.** The footer phone number and Station credit were 17–18 px tall, under the WCAG 2.5.8 24 px
+  minimum. Both are `inline-block` with padding now. Nothing under 24 px remains.
+- **Contrast.** `.foot-legal` used `opacity:.5`, which a child cannot undo, so the credit link measured 2.16:1.
+  It dims with `color:rgba(244,239,232,.55)` instead; the link keeps full-strength `--accent` (every drink
+  accent clears 4.5:1 on black). accesslint live: **0 violations**.
+- Mobile 4× CPU-throttled, no GPU: p95 **28.9 ms**, max 85.5, 5 frames over 50 (was p95 46 with the pin).
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed

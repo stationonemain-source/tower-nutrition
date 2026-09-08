@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Oswald:wght@500;700&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/01-poster.webp">
-<link rel="stylesheet" href="css/site.css?v=202609081432">
+<link rel="stylesheet" href="css/site.css?v=202609081445">
 </head>
 <body>
 
@@ -27,7 +27,6 @@
   </a>
   <nav class="nav" aria-label="Sections">
     <a href="#film">Loadout</a>
-    <a href="#lineup">Lineup</a>
     <a href="#photos">Photos</a>
     <a href="#menu">Board</a>
     <a href="#visit">Visit</a>
@@ -37,6 +36,13 @@
 
 <main>
 <h1 class="sr-only">The Tower Energy &amp; Nutrition — energy teas, protein shakes and coffees on Campus Corner in Norman, Oklahoma</h1>
+<ul class="sr-only">
+  <li>Wondermelon, energy tea, watermelon.</li>
+  <li>Hurricane Huda, energy tea, blue to violet.</li>
+  <li>Tropical Splash, energy tea, lime and lemon.</li>
+  <li>Viva Las Vegas, energy tea, margarita, strawberry, cranberry and limeade.</li>
+  <li>Chocolate Brownie, protein shake with a whipped top.</li>
+</ul>
 
 <!-- ============ THE LOADOUT — scroll-film ============ -->
 <section id="film" class="film" data-theme="dark" aria-label="The loadout — scroll to turn each drink">
@@ -141,22 +147,6 @@
 </div></div></div>
 
 <!-- ============ LINEUP — pinned horizontal run ============ -->
-<section id="lineup" class="lineup" data-theme="dark">
-  <div class="wrap lineup-head">
-    <span class="kicker mono reveal">The lineup</span>
-    <h2 class="h-display" data-words>Five of the regulars.</h2>
-  </div>
-  <div class="run">
-    <div class="run-bg" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span></div>
-    <div class="track">
-      <a class="hcard" href="#film" data-go="0" style="--c:#FF3B6B"><img src="img/01-card.webp" alt="Wondermelon energy tea, floating with ice" loading="lazy" decoding="async"><span class="hcard-n">01</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Wonder&shy;melon</span><span class="hcard-sub mono">Energy tea · watermelon</span></a>
-      <a class="hcard" href="#film" data-go="1" style="--c:#6B7BFF"><img src="img/02-card.webp" alt="Hurricane Huda energy tea, blue and violet" loading="lazy" decoding="async"><span class="hcard-n">02</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Hurricane Huda</span><span class="hcard-sub mono">Energy tea · blue to violet</span></a>
-      <a class="hcard" href="#film" data-go="2" style="--c:#B5F02A"><img src="img/03-card.webp" alt="Tropical Splash energy tea, lime and lemon" loading="lazy" decoding="async"><span class="hcard-n">03</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Tropical Splash</span><span class="hcard-sub mono">Energy tea · lime, lemon</span></a>
-      <a class="hcard" href="#film" data-go="3" style="--c:#FF2D55"><img src="img/04-card.webp" alt="Viva Las Vegas energy tea, cranberry into limeade" loading="lazy" decoding="async"><span class="hcard-n">04</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Viva Las Vegas</span><span class="hcard-sub mono">Energy tea · margarita, strawberry, cranberry, limeade</span></a>
-      <a class="hcard" href="#film" data-go="4" style="--c:#D9B48F"><img src="img/05-card.webp" alt="Chocolate Brownie protein shake with whipped cream" loading="lazy" decoding="async"><span class="hcard-n">05</span><span class="hcard-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="hcard-name">Chocolate Brownie</span><span class="hcard-sub mono">Protein shake · whipped top</span></a>
-    </div>
-  </div>
-</section>
 
 <!-- ============ STORY ============ -->
 <section id="story" class="story" data-theme="light">
@@ -186,7 +176,6 @@
     </ul>
   </div>
 </section>
-
 
 <!-- ============ SIT DOWN. SIP UP. — real photos, parallax strips ============ -->
 <section id="photos" class="sipup" data-theme="dark" aria-label="Photos from The Tower">
@@ -317,10 +306,10 @@
   </div>
 </footer>
 
-<script src="js/vendor/gsap.min.js?v=202609081432"></script>
-<script src="js/vendor/ScrollTrigger.min.js?v=202609081432"></script>
-<script src="js/vendor/lenis.min.js?v=202609081432"></script>
-<script src="js/manifest.js?v=202609081432"></script>
-<script src="js/loadout.js?v=202609081432"></script>
+<script src="js/vendor/gsap.min.js?v=202609081445"></script>
+<script src="js/vendor/ScrollTrigger.min.js?v=202609081445"></script>
+<script src="js/vendor/lenis.min.js?v=202609081445"></script>
+<script src="js/manifest.js?v=202609081445"></script>
+<script src="js/loadout.js?v=202609081445"></script>
 </body>
 </html>

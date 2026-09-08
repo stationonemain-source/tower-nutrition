@@ -351,9 +351,16 @@
     var words = el.textContent.trim().split(/\s+/); el.textContent = '';
     words.forEach(function (w, i) { var o = document.createElement('span'); o.className = 'w'; var s = document.createElement('span'); s.textContent = w; o.appendChild(s); el.appendChild(o); if (i < words.length - 1) el.appendChild(document.createTextNode(' ')); });
   }
+  /* chars, but grouped into words: bare inline-block chars let the browser break a line mid-word,
+     which orphaned the "E." of "AVE." on narrow screens. Each word is one unbreakable inline-block. */
   function splitChars(el) {
-    var text = el.textContent; el.textContent = '';
-    for (var i = 0; i < text.length; i++) { var s = document.createElement('span'); s.className = 'c'; s.textContent = text[i] === ' ' ? ' ' : text[i]; el.appendChild(s); }
+    var words = el.textContent.trim().split(/\s+/); el.textContent = '';
+    words.forEach(function (w, wi) {
+      var wrap = document.createElement('span'); wrap.className = 'cw';
+      for (var i = 0; i < w.length; i++) { var s = document.createElement('span'); s.className = 'c'; s.textContent = w[i]; wrap.appendChild(s); }
+      el.appendChild(wrap);
+      if (wi < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
   }
   $$('[data-words]').forEach(splitWords);
   $$('[data-chars]').forEach(splitChars);
@@ -382,21 +389,7 @@
     if (!hasST || STATIC) return;
     var headH = parseFloat(getComputedStyle(root).getPropertyValue('--head-h')) || 72;
 
-    /* 1. LINEUP — pinned horizontal run */
-    var run = $('.run'), track = $('.track'), runBg = $('.run-bg');
-    var dist = function () { return Math.max(0, track.scrollWidth - window.innerWidth); };
-    var trackTween = gsap.to(track, { x: function () { return -dist(); }, ease: 'none',
-      scrollTrigger: { trigger: run, pin: true, scrub: 0.5, start: 'top top', end: function () { return '+=' + (dist() + window.innerHeight * 0.15); }, invalidateOnRefresh: true, anticipatePin: 1 } });
-    gsap.to(runBg, { x: function () { return -dist() * 0.42; }, ease: 'none',
-      scrollTrigger: { trigger: run, scrub: 0.5, start: 'top top', end: function () { return '+=' + (dist() + window.innerHeight * 0.15); }, invalidateOnRefresh: true } });
-    $$('.hcard').forEach(function (c, i) {
-      gsap.fromTo($('img', c), { xPercent: -7 }, { xPercent: 7, ease: 'none',
-        scrollTrigger: { trigger: c, containerAnimation: trackTween, start: 'left right', end: 'right left', scrub: true } });
-      gsap.from(c, { y: 90, rotation: i % 2 ? 3 : -3, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: c, containerAnimation: trackTween, start: 'left 95%', once: true } });
-    });
-
-    /* 2. BOARD — stacking cards */
+    /* 1. BOARD — stacking cards */
     var fams = $$('.family');
     fams.forEach(function (f, i) {
       var next = fams[i + 1];
