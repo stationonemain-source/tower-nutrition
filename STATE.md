@@ -93,6 +93,18 @@ is the exact recipe; drop the mp4 in `clips/flat/`, run the remover, then `./ass
 `assemble-float.sh` now reads `clips/flat/` + `keyframes/flat/`, and the poster silhouette is a CLOSING
 (dilate×12 → erode×12) so the sticker text no longer punches see-through holes in the stills.
 
+## v3.4 — all five cups filmed with flat lids (2026-09-07 evening)
+Cups 03/04/05 were filmed on **Circle's own Kling account** (kling.ai, Video 3.0, 1080p, 5 s, Native Audio OFF,
+40 Kling credits each = 120; balance there 2.8k) by driving the web app in Chrome: upload `keyframes/flat/NN.png`
+as the start frame, paste `clips/float/kling.prompt.txt` (brownie variant swaps "ice cubes and water droplets" for
+"brownie chunks, chocolate chips and syrup drops"), Generate, then the card's download button → `~/Downloads/kling_*.mp4`.
+Identity is NOT in the filename — confirm by first frame before staging. Kling stamps a "KlingAI 3.0" watermark bottom-right;
+the 56 % centre crop discards it (the "Without Watermark" option in the download panel is the cleaner path next time).
+Then `finish-kling.sh <name> <mp4>` = Higgsfield Video Background Remover (1) + Bytedance 2K aigc upscale (0.2) + assemble.
+Higgsfield balance now **2.6 credits**. `manifest.js` has 61 frames for all five; the still-float path is dormant (kept).
+Kling result videos are served from a service-worker cache — they never appear in the network log or resource
+timing, so the download button is the only retrieval path from the web app.
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed
