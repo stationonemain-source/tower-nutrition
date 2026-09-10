@@ -41,12 +41,13 @@
 
   var film = $('#film'), stage = $('#stage'), head = $('#top'), loadbar = $('#loadbar i'), loadwrap = $('#loadbar');
   var rig = $('.rig'), glow = $('.glow'), shadow = $('.shadow');
-  var slots = $$('.slot'), titles = $$('.title'), huds = $$('.hud'), dots = $$('.dot'), counter = $('#cur');
+  var slots = $$('.slot'), titles = $$('.title'), huds = $$('.hud'), dots = $$('.dchip'), chipbox = $('.dchips'), counter = $('#cur');
   var root = document.documentElement;
   var hasGsap = typeof gsap !== 'undefined', hasST = hasGsap && typeof ScrollTrigger !== 'undefined';
   if (hasST) gsap.registerPlugin(ScrollTrigger);
 
-  if (!FLAT) film.style.height = 'calc(' + (N * UNIT * 100) + 'vh + 100vh)';
+  /* the hero is ONE screen. Drinks are browsed with the arrows, the name buttons or a swipe —
+     scrolling carries you down the page instead of through all five cups. */
 
   /* ---------- frame store + loader ---------- */
   var store = DRINKS.map(function (d) {
@@ -180,11 +181,21 @@
 
   /* ---------- chapter bookkeeping ---------- */
   var cur = -1, curVis = 0, accentTween = null;
+  var fromIdx = -1, navDir = 1, trT = 1, TRDUR = 620;   /* trT: 0 = switch just started, 1 = settled */
   function setVisual(k) {
     if (k === curVis && cur !== -1) return;
     curVis = k; cur = k;
     counter.textContent = DRINKS[k].id;
     dots.forEach(function (d, j) { d.classList.toggle('is-on', j === k); d.setAttribute('aria-selected', j === k ? 'true' : 'false'); });
+    /* keep the active name in view inside its own scroller — on a phone only about two chips fit.
+       scrollTo on the container (not scrollIntoView) so the PAGE never moves. */
+    if (chipbox && dots[k]) {
+      /* measure from rects, not offsetLeft: .dchips is not positioned, so offsetLeft is relative to
+         .selector and includes the prev arrow — which overshot and pushed long names back out of view. */
+      var ce = dots[k], cr = chipbox.getBoundingClientRect(), er = ce.getBoundingClientRect();
+      var want = chipbox.scrollLeft + (er.left - cr.left) - (cr.width - er.width) / 2;
+      try { chipbox.scrollTo({ left: want, behavior: STATIC ? 'auto' : 'smooth' }); } catch (e) { chipbox.scrollLeft = want; }
+    }
     if (hasGsap) {
       if (accentTween) accentTween.kill();
       if (LITE) root.style.setProperty('--accent', DRINKS[k].accent);   /* a tween on a :root var restyles the whole page every frame — too much for a phone */
@@ -198,24 +209,19 @@
   }
 
   /* ---------- the render ---------- */
-  var U = 0, uT = 0, settled = false, scrolledOnce = false, stageVisible = true;
+  var settled = false, scrolledOnce = false, stageVisible = true;
   function progress() {
     var r = film.getBoundingClientRect(), H = stage.clientHeight;
     stageVisible = r.bottom > 0;
     return clamp(-r.top / Math.max(1, r.height - H), 0, 1);
   }
   function render(dt) {
-    var i = Math.min(N - 1, Math.floor(U / UNIT)), local = U - i * UNIT;
-    var turn = Math.min(1, local / TURN);
-    var s = local > TURN ? Math.min(1, (local - TURN) / SWIPE) : 0;
-    var last = i === N - 1;
-    var vis = (!last && s > 0.5) ? i + 1 : i;
-    if (vis !== curVis || cur === -1) setVisual(vis);
-    if (U > 0.002 && !scrolledOnce) { scrolledOnce = true; stage.classList.add('scrolled'); }
-
-    /* ambient: tilt toward the cursor, idle bob, velocity */
-    mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
     clock += dt || 16;
+    if (trT < 1) trT = Math.min(1, trT + (dt || 16) / TRDUR);
+    var t = smooth(trT), moving = trT < 1;
+
+    /* ambient: tilt toward the cursor, idle bob */
+    mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
     bob = STATIC ? 0 : Math.sin(clock / 1000 * 1.35) * 8;
     if (!STATIC) {
       rig.style.transform = 'rotateX(' + (-my * 4).toFixed(2) + 'deg) rotateY(' + (mx * 7).toFixed(2) + 'deg)';
@@ -226,39 +232,33 @@
     }
 
     for (var k = 0; k < N; k++) {
-      var sl = slots[k], t = titles[k], h = huds[k], on = false;
-      if (k === i) {
+      var sl = slots[k], ti = titles[k], h = huds[k], on = false;
+      if (k === curVis) {
         on = true;
-        var f = turn * Math.max(0, store[k].n - 1);
-        if (store[k].n) { lastFrame[k] = f; ensureBitmaps(k, Math.round(f)); draw(k, f); }
-        else {                              /* real-photo still: rock, drift and breathe across its own segment */
-          sl._sway = Math.sin(turn * Math.PI * 2) * 5;
-          sl._drift = (0.5 - turn) * 30;
-          sl._zoom = 1 + Math.sin(turn * Math.PI) * 0.05;
-        }
-        if (turn > 0.3 && !last) ensureBitmaps(k + 1, 0);
-        if (!last) { slotXf(sl, smooth(s), -1, bob * (1 - s)); textOut(t, s, 140, 0); textOut(h, s, 0, 30); }
-        else { slotXf(sl, 0, -1, bob); textRest(t); textRest(h); }
-        /* the name drifts against the cursor for depth, and skews with scroll velocity */
-        t.style.transform = (t.style.transform || '') + ' translate3d(' + (-mx * 18).toFixed(1) + 'px,' + (-my * 10).toFixed(1) + 'px,0) skewY(' + (-vel * 5).toFixed(2) + 'deg)';
-      } else if (k === i + 1 && s > 0) {
+        /* the resting cup breathes on the clock now, not on scroll position */
+        var ph = clock / 1000;
+        sl._sway = STATIC ? 0 : Math.sin(ph * 0.55) * 3.2;
+        sl._drift = STATIC ? 0 : Math.sin(ph * 0.42 + 1.1) * 10;
+        sl._zoom = STATIC ? 1 : 1 + Math.sin(ph * 0.33) * 0.012;
+        slotXf(sl, moving ? 1 - t : 0, navDir, bob);
+        if (moving) { textIn(ti, trT, 140 * navDir, 30); textIn(h, trT, 0, 30); }
+        else { textRest(ti); textRest(h); }
+        ti.style.transform = (ti.style.transform || '') + ' translate3d(' + (-mx * 18).toFixed(1) + 'px,' + (-my * 10).toFixed(1) + 'px,0) skewY(' + (-vel * 5).toFixed(2) + 'deg)';
+      } else if (moving && k === fromIdx) {
         on = true;
-        lastFrame[k] = 0; ensureBitmaps(k, 0); draw(k, 0);
-        slotXf(sl, 1 - smooth(s), 1, bob * s); textIn(t, s, 140, 0); textIn(h, s, 0, 30);
+        slotXf(sl, t, -navDir, bob);
+        textOut(ti, trT, 140 * navDir, 30); textOut(h, trT, 0, 30);
       }
-      if (on !== sl.classList.contains('is-vis')) { sl.classList.toggle('is-vis', on); t.classList.toggle('is-vis', on); h.classList.toggle('is-vis', on); }
-      if (!on) { sl.style.transform = ''; sl.style.opacity = ''; sl.style.filter = ''; textRest(t); textRest(h); release(k); }
+      if (on !== sl.classList.contains('is-vis')) { sl.classList.toggle('is-vis', on); ti.classList.toggle('is-vis', on); h.classList.toggle('is-vis', on); }
+      if (!on) { sl.style.transform = ''; sl.style.opacity = ''; sl.style.filter = ''; textRest(ti); textRest(h); release(k); }
     }
-    stage.style.opacity = last ? String(1 - smooth(s)) : '';
   }
   var lastT = 0, tickN = 0;
   function tick(time) {
     var now = performance.now(), dt = lastT ? Math.min(50, now - lastT) : 16; lastT = now;
     var y = window.scrollY; velT = clamp((y - lastY) / Math.max(1, window.innerHeight) * 12, -1, 1); lastY = y;
     vel += (velT - vel) * 0.12;
-    uT = progress() * N * UNIT;
-    U += (uT - U) * (settled ? 0.16 : 1);
-    if (Math.abs(uT - U) < 0.0004) U = uT;
+    progress();                                  /* still needed: keeps stageVisible honest */
     if (stageVisible) { render(dt); fxTick(dt); }
     if ((++tickN & 3) === 0 || !stageVisible) headTheme();
     tickerSkew();
@@ -328,24 +328,81 @@
 
   /* ---------- static / reduced-motion path ---------- */
   function renderStatic() {
-    var i = FLAT ? 0 : Math.min(N - 1, Math.round(progress() * N * UNIT / UNIT));
-    if (i !== curVis || cur === -1) setVisual(i);
-    for (var k = 0; k < N; k++) { var on = k === i; slots[k].classList.toggle('is-vis', on); titles[k].classList.toggle('is-vis', on); huds[k].classList.toggle('is-vis', on); }
+    if (cur === -1) setVisual(0);
+    for (var k = 0; k < N; k++) {
+      var on = k === curVis;
+      slots[k].classList.toggle('is-vis', on); titles[k].classList.toggle('is-vis', on); huds[k].classList.toggle('is-vis', on);
+    }
     headTheme();
   }
 
   /* ---------- selector ---------- */
   var lenis = null;
-  function chapterY(k) { var H = stage.clientHeight, top = film.offsetTop, span = film.offsetHeight - H; return top + (k * UNIT) / (N * UNIT) * span + 2; }
-  function scrollToY(y, dur) { if (lenis) lenis.scrollTo(y, { duration: dur || 1.1, easing: function (t) { return 1 - Math.pow(1 - t, 4); } }); else window.scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }
-  function goTo(k) { scrollToY(chapterY(clamp(k, 0, N - 1))); }
-  $('.arrow.prev').addEventListener('click', function () { goTo(curVis - 1); });
-  $('.arrow.next').addEventListener('click', function () { goTo(curVis + 1); });
+  function switchTo(k, dir) {
+    k = clamp(k, 0, N - 1);
+    if (k === curVis) return;
+    navDir = dir || (k > curVis ? 1 : -1);
+    fromIdx = curVis; trT = 0;
+    setVisual(k);
+    if (!scrolledOnce) { scrolledOnce = true; stage.classList.add('scrolled'); }
+  }
+  function goTo(k) { switchTo(k); }
+
+  /* swipe the stage left/right to change drink; vertical intent is left alone so the page still scrolls */
+  (function () {
+    if (STATIC) return;
+    var sx = 0, sy = 0, live = false, axis = '';
+    stage.addEventListener('touchstart', function (e) {
+      if (e.touches.length !== 1) return;
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; live = true; axis = '';
+    }, { passive: true });
+    stage.addEventListener('touchmove', function (e) {
+      if (!live) return;
+      var dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
+      if (!axis && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (axis === 'x' && Math.abs(dx) > 56) { step(dx < 0 ? 1 : -1); live = false; }
+    }, { passive: true });
+    stage.addEventListener('touchend', function () { live = false; }, { passive: true });
+    /* trackpad / shift-wheel horizontal flicks on desktop */
+    var wlock = 0;
+    stage.addEventListener('wheel', function (e) {
+      var dx = e.shiftKey ? e.deltaY : e.deltaX;
+      if (Math.abs(dx) < 24 || Math.abs(dx) < Math.abs(e.deltaY) * (e.shiftKey ? 0 : 1.2)) return;
+      var now = performance.now(); if (now - wlock < 700) return; wlock = now;
+      step(dx > 0 ? 1 : -1);
+    }, { passive: true });
+  })();
+
+  /* the photo strips are native horizontal scrollers: drag with a pointer, swipe on touch */
+  $$('.strip').forEach(function (st, si) {
+    var down = false, px = 0, pl = 0, moved = 0;
+    st.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;            /* let the browser do native touch scrolling */
+      down = true; moved = 0; px = e.clientX; pl = st.scrollLeft; st.classList.add('is-drag');
+      try { st.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    st.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var d = e.clientX - px; moved = Math.max(moved, Math.abs(d));
+      st.scrollLeft = pl - d; e.preventDefault();
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) {
+      st.addEventListener(ev, function () { down = false; st.classList.remove('is-drag'); });
+    });
+    st.addEventListener('click', function (e) { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+    st.setAttribute('tabindex', '0');
+    st.setAttribute('role', 'region');
+    st.setAttribute('aria-label', 'Photos from The Tower, row ' + (si + 1) + ' of 2, scroll sideways');
+  });
+  /* the ends wrap, so neither arrow is ever a dead control */
+  function step(d) { switchTo((curVis + d + N) % N, d); }
+  $('.arrow.prev').addEventListener('click', function () { step(-1); });
+  $('.arrow.next').addEventListener('click', function () { step(1); });
   $$('[data-go]').forEach(function (el) { el.addEventListener('click', function (e) { e.preventDefault(); goTo(+el.getAttribute('data-go')); }); });
   window.addEventListener('keydown', function (e) {
     var r = film.getBoundingClientRect(); if (r.top > 0 || r.bottom < stage.clientHeight) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(curVis + 1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(curVis - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
   });
   $$('.nav a, .lockup').forEach(function (a) {
     a.addEventListener('click', function (e) {
@@ -410,14 +467,24 @@
     /* 2b. SIT DOWN SIP UP — photo strips slide opposite ways with scroll; polaroid + storefront parallax; chips pop in */
     $$('.strip').forEach(function (st) {
       var dir = +st.getAttribute('data-dir') || -1, row = $('.strip-row', st);
-      gsap.fromTo(row, { x: dir < 0 ? 0 : -260 }, { x: dir < 0 ? -420 : 160, ease: 'none', scrollTrigger: { trigger: st, start: 'top bottom', end: 'bottom top', scrub: 0.4 } });
+      /* the strip is a real scroller now, so the page-scroll pan writes scrollLeft — and hands over
+         permanently the moment someone drags, swipes, wheels or tabs into it. */
+      var taken = false;
+      ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (ev) {
+        st.addEventListener(ev, function () { taken = true; }, { passive: true });
+      });
+      ScrollTrigger.create({ trigger: st, start: 'top bottom', end: 'bottom top', onUpdate: function (self) {
+        if (taken) return;
+        var range = Math.max(0, st.scrollWidth - st.clientWidth), p = self.progress;
+        st.scrollLeft = dir < 0 ? p * range * 0.85 : range * (1 - p * 0.85);
+      } });
       gsap.from($$('img', row), { y: 40, opacity: 0, stagger: 0.05, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: st, start: 'top 90%', once: true } });
     });
     var pol = $('.polaroid');
     if (pol) gsap.fromTo(pol, { y: 60, rotation: 6 }, { y: -60, rotation: 1, ease: 'none', scrollTrigger: { trigger: $('#story'), start: 'top bottom', end: 'bottom top', scrub: 0.5 } });
     var vp = $('.visit-photo img');
     if (vp) gsap.fromTo(vp, { yPercent: -9, scale: 1.08 }, { yPercent: 9, scale: 1, ease: 'none', scrollTrigger: { trigger: $('.visit-photo'), start: 'top bottom', end: 'bottom top', scrub: 0.4 } });
-    var chips = $$('.chip');
+    var chips = $$('.flavor-wall .chip');   /* scoped: the hero's drink buttons are .dchip and must never be hidden by this */
     if (chips.length) gsap.from(chips, { y: 30, opacity: 0, rotation: function (i) { return i % 2 ? 4 : -4; }, stagger: 0.04, duration: 0.7, ease: 'back.out(1.6)', scrollTrigger: { trigger: $('.flavor-wall'), start: 'top 88%', once: true } });
 
     /* 3. word + char reveals */
@@ -516,7 +583,7 @@
       if (ok || performance.now() - t0 > 30000) {
         if (!ok) console.warn('[loadout] ready timeout — frames still loading');
         if (!STATIC) {
-          if (JUMP !== null) { window.scrollTo(0, +JUMP || 0); lastY = window.scrollY; U = uT = progress() * N * UNIT; tx = ty = mx = my = 0; }
+          if (JUMP !== null) { window.scrollTo(0, +JUMP || 0); lastY = window.scrollY; tx = ty = mx = my = 0; }
           settled = true; render(16);
           if (JUMP !== null && hasST) { ScrollTrigger.refresh(); window.scrollTo(0, +JUMP || 0); ScrollTrigger.update(); render(16); }
           intro();

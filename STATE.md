@@ -223,6 +223,32 @@ hands had to come out of the other shots.
 - Cutouts rebuilt from the hand-free versions with the same `cut-cup.sh`; site images regenerated at 1200 /
   760 / 520 tall.
 
+## v5.0 — the hero stops eating the scroll (2026-09-10, Circle's notes)
+Circle: people did not want to scroll through five drinks to reach the rest of the page, and asked for menu
+buttons plus arrows/swipe. The hero is now **one screen** and the drinks are browsed, not scrolled.
+- `#film` no longer sets its own height (was `N*1.62*100vh` ≈ 810vh). Page height at 375 px: **17,424 → ~10,430**.
+- The scroll playhead (`U`/`uT`/`progress()*N*UNIT`) is gone. In its place a transition state machine:
+  `fromIdx`, `navDir`, `trT` (0→1 over `TRDUR` 620 ms). `switchTo(k, dir)` starts it; `step(±1)` wraps at both
+  ends so neither arrow is ever dead. Resting cups breathe on the clock rather than on scroll position.
+- Controls: named **`.dchip`** buttons (NOT `.chip` — that class already belongs to the flavour wall, and its
+  scroll-triggered fade would have hidden the hero's buttons), arrows, keyboard left/right, touch swipe with
+  axis detection so vertical scrolling still works, and shift-wheel / trackpad horizontal on desktop.
+- The photo strips after the reviews are **native horizontal scrollers** now: pointer drag on desktop, native
+  swipe on touch. The page-scroll pan writes `scrollLeft` and hands over permanently on first interaction.
+  A drag past 6 px cancels the click so dragging never follows a link.
+
+### Four bugs this pass, all found by measuring rather than reading the CSS
+1. `.hint` ("swipe or tap to browse") sat over the next arrow and swallowed its clicks. `elementFromPoint`
+   named it. It is decoration → `pointer-events:none`.
+2. The chip's active state still targeted `$$('.dot')`, which no longer exists, so highlighting never moved.
+3. Mobile chip rules were inserted into the FIRST `@media (max-width:820px)` block, which sits ABOVE the base
+   `.dchips` rule — equal specificity, so source order won and they silently did nothing. There are two such
+   blocks in this file; overrides belong in the LAST one.
+4. Chip auto-centring used `offsetLeft`, but `.dchips` is not positioned, so the offset parent is `.selector`
+   and the value included the prev arrow — long names overshot back out of view. Now measured from
+   `getBoundingClientRect()`, which does not care about the offset parent. Verified at 320/360/390/430.
+- accesslint live: 0 violations (both photo rows needed unique labels — `region` landmarks must differ).
+
 ## Concept — "LOADOUT" v2
 Loaded teas → a loadout screen. Five cups LEVITATE in a black void with ice/droplets orbiting (brownie chunks for
 the shake). Each cup is its own alpha-matted 360° turntable; the name sits BEHIND the cup in giant condensed
